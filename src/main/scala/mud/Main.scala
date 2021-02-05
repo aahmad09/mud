@@ -1,13 +1,20 @@
 package mud
 
 import scala.io.StdIn._
-/**
-This is a stub for the main class for your MUD.
-*/
+
 object Main {
 	def main(args: Array[String]): Unit = {
-		println("Welcome to my MUD. What is your name?")
-		val name = readLine().trim()
-		println(s"Hello $name.")
+		var inputCommand: String = ""
+		var player = new Player
+		println(Room.rooms(0).desc)
+
+		println(s"Welcome ${player.name}\nEnter 'help' to see list of commands")
+
+
+		while (inputCommand!="exit") {
+			inputCommand= readLine().trim()
+			player.processCommand(inputCommand.toLowerCase)
+		}
+
 	}
 }
