@@ -2,7 +2,10 @@ package mud
 
 import scala.io.Source
 
-class Room(val name: String, val desc: String, private val exits: Array[Int], private var items: List[Item]) {
+class Room(val name: String,
+           val desc: String,
+           private val exits: Array[Int],
+           private var items: List[Item]) {
 
   //Print the complete description of the room.
   def fullDescription(): Unit = println(name + "\n" +
@@ -14,7 +17,7 @@ class Room(val name: String, val desc: String, private val exits: Array[Int], pr
   def formatItem(unformattedItems: List[Item]): String = {
     var itemStr: String = ""
     for (elem <- unformattedItems) itemStr += elem.itemName + ", "
-//    + " \n" + elem.itemDesc + "\n"
+    //    + " \n" + elem.itemDesc + "\n"
     if (itemStr == "") itemStr = "None  "
     itemStr.dropRight(2)
   }
@@ -24,15 +27,12 @@ class Room(val name: String, val desc: String, private val exits: Array[Int], pr
     //north=0, south=1, east=2, west=3, up=4, and down=5
     var exitStr: String = ""
 
-    unformattedExits.foreach {
-      case 0 => exitStr += "North, "
-      case 1 => exitStr += "South, "
-      case 2 => exitStr += "East, "
-      case 3 => exitStr += "West, "
-      case 4 => exitStr += "Up, "
-      case 5 => exitStr += "Down, "
-      case _ =>
-    }
+    if (unformattedExits(0) != -1) exitStr += "north, "
+    if (unformattedExits(1) != -1) exitStr += "south, "
+    if (unformattedExits(2) != -1) exitStr += "east, "
+    if (unformattedExits(3) != -1) exitStr += "west, "
+    if (unformattedExits(4) != -1) exitStr += "up, "
+    if (unformattedExits(5) != -1) exitStr += "down, "
 
     exitStr.dropRight(2) + "\n"
   }
@@ -47,15 +47,14 @@ class Room(val name: String, val desc: String, private val exits: Array[Int], pr
   def getItem(itemName: String): Option[Item] = {
     items.find(_.name.toLowerCase == itemName) match {
       case Some(item) =>
-        val index = items.indexOf(item)
-        items = items.patch(index, Nil, 1)
+        items = items.patch(items.indexOf(item), Nil, 1)
         Some(item)
       case None => None
     }
   }
 
   //Add an item to this room
-  def dropItem(item: Item): Unit = item :: items
+  def dropItem(item: Item): Unit = items = item :: items
 
 }
 
