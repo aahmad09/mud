@@ -28,13 +28,6 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
           case None => println(s"The ${subCommands(1)} item is not in your inventory")
           case Some(obtainedItem) =>  currentLoc.dropItem(obtainedItem)
         }
-
-//        if (getFromInventory(subCommands(1)).isDefined) {
-//          val obtainedItem = getFromInventory(subCommands(1)).get
-//          currentLoc.dropItem(obtainedItem)
-//        } else {
-//          println(s"The ${subCommands(1)} item is not in your inventory")
-//        }
       case c if c == "Inventory" || c == "inv" => println(inventoryListing())
       case c if "nsewup".contains(c.toLowerCase) || Array("north", "east", "south", "west", "up", "down")
         .contains(c.toLowerCase) => move(command)
@@ -89,6 +82,13 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
   }
 
   //print a list of possible commands
-  def printHelp(): Unit = println("Some help message") //TODO Help message
+  def printHelp(): Unit = println("""The following commands are supported:
+'north', 'south', 'east', 'west', 'up', 'down' - for movement
+'look' - get the full description of the current room
+'inv'/'inventory' - list the contents of your inventory
+get 'item' - get an item from the room and add it to your inventory
+drop 'item' -  drop an item from your inventory into the room
+exit - leave the game
+help - print a list of commands and their description.""")
 
 }
