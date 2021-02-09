@@ -1,0 +1,17 @@
+3
+CSI 257 (0)
+A room filled with the glow of computers and the scent of dispair.
+-1,1,-1,-1,-1,-1
+2
+Chair
+Something that you sit on.
+Computer
+The most powerful device in the Universe!
+Hallway (1)
+A long room that connects other rooms.
+0,-1,2,-1,-1,-1
+0
+Broadway (2)
+A really big hall.
+-1,-1,-1,1,-1,-1
+0
