@@ -5,7 +5,11 @@ import scala.io.StdIn._
 class Player(val playerName: String = readLine("Welcome to my MUD. What is your name?\n").trim(),
              private var inventory: List[Item] = Nil) {
 
-  println(s"Welcome $playerName\nEnter 'help' to see a list of commands")
+  println("*"*100 + s"\nYou are finally awake $playerName\nMy name is Sif, and I am the onboard AI for this ship. " +
+    s"You have been in cryosleep for 5 Earth years since we left Earth. Let me give you a summary of what happened." +
+    s" We left Earth in 2055 with our mission to reach Planet X. As soon as we crossed Mars, you went into cryosleep " +
+    s"just before our scheduled warp drive. Although the warp drive was successful, it did not send us to Planet X, " +
+    s"and now we are stuck at the outer edge of M32 galaxy. Where would you like to warp drive now?\n" + "*"*100)
 
   //starting location as room 0
   private var currentLoc = Room.rooms(0)
@@ -21,12 +25,12 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
       case "get" =>
         currentLoc.getItem(subCommands(1)) match {
           case None => println(s"The item ${subCommands(1)} is not in the room")
-          case Some(item) =>  addToInventory(item)
+          case Some(item) => addToInventory(item)
         }
       case "drop" =>
         getFromInventory(subCommands(1)) match {
           case None => println(s"The ${subCommands(1)} item is not in your inventory")
-          case Some(obtainedItem) =>  currentLoc.dropItem(obtainedItem)
+          case Some(obtainedItem) => currentLoc.dropItem(obtainedItem)
         }
       case c if c == "Inventory" || c == "inv" => println(inventoryListing())
       case c if "nsewup".contains(c.toLowerCase) || Array("north", "east", "south", "west", "up", "down")
@@ -82,12 +86,13 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
   }
 
   //print a list of possible commands
-  def printHelp(): Unit = println("""The following commands are supported:
-'north', 'south', 'east', 'west', 'up', 'down' - for movement
-'look' - get the full description of the current room
-'inv'/'inventory' - list the contents of your inventory
-get 'item' - get an item from the room and add it to your inventory
-drop 'item' -  drop an item from your inventory into the room
+  def printHelp(): Unit = println(
+    """Sif supports the following commands:
+'north', 'south', 'east', 'west', 'up', 'down' - for warp drive in a direction
+'look' - get the full description of the current region
+'inv'/'inventory' - list the contents of your spaceship's inventory
+get 'item' - get an item from the planet and add it to your spaceship's inventory
+drop 'item' -  drop an item from your spaceship's inventory into the void or the planet
 exit - leave the game
 help - print a list of commands and their description.""")
 
