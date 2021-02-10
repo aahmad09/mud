@@ -9,9 +9,10 @@ class Room(val name: String,
 
   //Print the complete description of the room.
   def fullDescription(): Unit = println(name + "\n" +
-    desc + "\n" +
+    wrap(desc)+ "\n" +
     "Exits: " + formatExits(exits) +
     "Items: " + formatItem(items))
+
 
   //Format item names and desc for printing
   def formatItem(unformattedItems: List[Item]): String = {
@@ -20,6 +21,13 @@ class Room(val name: String,
     //    + " \n" + elem.itemDesc + "\n"
     if (itemStr == "") itemStr = "None  "
     itemStr.dropRight(2)
+  }
+
+  def wrap(input : String, maxLength : Int=100): String = {
+    input.split (" ").foldLeft (("", 0))(
+      (acc, in) =>
+        if (in equals "") acc else if ((acc._2 + in.length()) < maxLength) { (acc._1 + " " + in, acc._2 + in.length()) }
+        else { (acc._1 + '\n' + in, in.length()) })._1.trim
   }
 
   //Transform exit numbers into direction names for printing

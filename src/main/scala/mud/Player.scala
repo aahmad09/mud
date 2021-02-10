@@ -5,14 +5,17 @@ import scala.io.StdIn._
 class Player(val playerName: String = readLine("Welcome to my MUD. What is your name?\n").trim(),
              private var inventory: List[Item] = Nil) {
 
-  println("*"*100 + s"\nYou are finally awake $playerName\nMy name is Sif, and I am the onboard AI for this ship. " +
-    s"You have been in cryosleep for 5 Earth years since we left Earth. Let me give you a summary of what happened." +
-    s" We left Earth in 2055 with our mission to reach Planet X. As soon as we crossed Mars, you went into cryosleep " +
-    s"just before our scheduled warp drive. Although the warp drive was successful, it did not send us to Planet X, " +
-    s"and now we are stuck at the outer edge of M32 galaxy. Where would you like to warp drive now?\n" + "*"*100)
+
 
   //starting location as room 0
   private var currentLoc = Room.rooms(0)
+
+  println("*"*100 + "\n" + currentLoc.wrap("You are finally awake " + playerName + ". My name is Sif, and I am the " +
+    "onboard AI for this ship.  You have been in cryosleep for 5 Earth years since we left Earth. " +
+    "Let me give you a summary of what happened. We left Earth in 2055 with our mission to reach Planet X. As soon as " +
+    "we crossed Mars, you went into cryosleep just before our scheduled warp drive. Although the warp drive was " +
+    "successful, it did not send us to Planet X, and now we are stuck at the outer edge of M32 galaxy. Where would you " +
+    "like to warp drive now?\n") + "\n" +  "*"*100)
   currentLoc.fullDescription()
 
   //Parse and act on a command
