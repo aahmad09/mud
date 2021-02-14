@@ -68,16 +68,7 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
 
   //Move the player in a particular direction if possible.
   def move(dir: String): Unit = {
-    var goLoc: Option[Room] = None
-
-    dir.take(1).toLowerCase match {
-      case "n" => goLoc = currentLoc.getExit(0)
-      case "s" => goLoc = currentLoc.getExit(1)
-      case "e" => goLoc = currentLoc.getExit(2)
-      case "w" => goLoc = currentLoc.getExit(3)
-      case "u" => goLoc = currentLoc.getExit(4)
-      case "d" => goLoc = currentLoc.getExit(5)
-    }
+    val goLoc = currentLoc.getExit("nsewud".indexOf(dir(0).toLower))
 
     if (goLoc.isDefined) {
       currentLoc = goLoc.get

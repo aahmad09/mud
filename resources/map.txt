@@ -1,6 +1,6 @@
 3
 Void
-A dark blanket, contrasting with blacks and yellows, and the occasional white, which is shaped as a circle and sometimes a crescent. The void had brought malefic darkness that enveloped the ship, devouring everything inside the pitch-black curtain. Inside, the air is still and dense, the temperature low, and you can only hear the hum of the engine. There are star far away in the south which dot the blanket in an ornate pattern. Towards every other direction...nothingness. You need to warp drive to a planet...
+A dark blanket, contrasting with blacks and yellows, and the occasional white, which is shaped as a circle and sometimes a crescent. The void had brought malefic darkness that enveloped the ship, devouring everything inside the pitch-black curtain. Inside, the air is still and dense, the temperature low, and you can only hear the hum of the engine. There are stars far away in the south which dot the blanket in an ornate pattern. Towards every other direction...nothingness. You need to warp drive to a planet...
 -1,1,-1,-1,-1,-1
 0
 Planet Kudenerth
