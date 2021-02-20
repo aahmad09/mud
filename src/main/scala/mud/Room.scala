@@ -8,26 +8,25 @@ class Room(val name: String,
            private var items: List[Item]) {
 
   //Print the complete description of the room.
-  def fullDescription(): Unit = println(name + "\n" +
-    wrap(desc)+ "\n" +
-    "Exits: " + formatExits(exits) +
-    "Items: " + formatItem(items))
-
+  def fullDescription(): Unit = println(s"$name\n${wrap(desc)}\nExits: ${formatExits(exits)}Items: ${formatItem(items)}")
 
   //Format item names and desc for printing
   def formatItem(unformattedItems: List[Item]): String = {
     var itemStr: String = ""
     for (elem <- unformattedItems) itemStr += elem.itemName + ", "
-    //    + " \n" + elem.itemDesc + "\n"
     if (itemStr == "") itemStr = "None  "
     itemStr.dropRight(2)
   }
 
-  def wrap(input : String, maxLength : Int=100): String = {
-    input.split (" ").foldLeft (("", 0))(
+  def wrap(input: String, maxLength: Int = 100): String = {
+    input.split(" ").foldLeft(("", 0))(
       (acc, in) =>
-        if (in equals "") acc else if ((acc._2 + in.length()) < maxLength) { (acc._1 + " " + in, acc._2 + in.length()) }
-        else { (acc._1 + '\n' + in, in.length()) })._1.trim
+        if (in equals "") acc else if ((acc._2 + in.length()) < maxLength) {
+          (acc._1 + " " + in, acc._2 + in.length())
+        }
+        else {
+          (acc._1 + '\n' + in, in.length())
+        })._1.trim
   }
 
   //Transform exit numbers into direction names for printing
@@ -67,22 +66,23 @@ class Room(val name: String,
 }
 
 object Room {
-  val rooms: Array[Room] = readRooms()
+  val rooms: Map[String,Room] = readRooms()
 
-  def readRooms(): Array[Room] = {
+  def readRooms(): Map[String,Room] = {
     val source = Source.fromFile("resources/map.txt")
     val lines = source.getLines()
-    val ret = Array.fill(lines.next().toInt)(readRoom(lines))
+    val ret = Array.fill(lines.next().toInt)(readRoom(lines)).toMap
     source.close()
     ret
   }
 
-  def readRoom(lines: Iterator[String]): Room = {
+  def readRoom(lines: Iterator[String]): (String,Room) = {
+    val keyword = lines.next()
     val name = lines.next()
     val desc = lines.next()
     val exits = lines.next().split(",").map(_.toInt)
     val items = List.fill(lines.next().toInt)(Item(lines.next(), lines.next()))
-    new Room(name, desc, exits, items)
+    (keyword, new Room(name, desc, exits, items))
   }
 
 }
