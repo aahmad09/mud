@@ -4,7 +4,7 @@ import scala.io.Source
 
 class Room(val name: String,
            val desc: String,
-           private val exits: Array[Int],
+           private val exits: Array[String],
            private var items: List[Item]) {
 
   //Print the complete description of the room.
@@ -30,23 +30,23 @@ class Room(val name: String,
   }
 
   //Transform exit numbers into direction names for printing
-  def formatExits(unformattedExits: Array[Int]): String = {
+  def formatExits(unformattedExits: Array[String]): String = {
     //north=0, south=1, east=2, west=3, up=4, and down=5
     var exitStr: String = ""
 
-    if (unformattedExits(0) != -1) exitStr += "north, "
-    if (unformattedExits(1) != -1) exitStr += "south, "
-    if (unformattedExits(2) != -1) exitStr += "east, "
-    if (unformattedExits(3) != -1) exitStr += "west, "
-    if (unformattedExits(4) != -1) exitStr += "up, "
-    if (unformattedExits(5) != -1) exitStr += "down, "
+    if (unformattedExits(0) != "none") exitStr += "north, "
+    if (unformattedExits(1) != "none") exitStr += "south, "
+    if (unformattedExits(2) != "none") exitStr += "east, "
+    if (unformattedExits(3) != "none") exitStr += "west, "
+    if (unformattedExits(4) != "none") exitStr += "up, "
+    if (unformattedExits(5) != "none") exitStr += "down, "
 
     exitStr.dropRight(2) + "\n"
   }
 
   //Return the room in a given direction if it exists
   def getExit(dir: Int): Option[Room] = {
-    if (exits(dir) == -1) None
+    if (exits(dir) == "none") None
     else Some(Room.rooms(exits(dir)))
   }
 
@@ -66,9 +66,9 @@ class Room(val name: String,
 }
 
 object Room {
-  val rooms: Map[String,Room] = readRooms()
+  val rooms: Map[String, Room] = readRooms()
 
-  def readRooms(): Map[String,Room] = {
+  def readRooms(): Map[String, Room] = {
     val source = Source.fromFile("resources/map.txt")
     val lines = source.getLines()
     val ret = Array.fill(lines.next().toInt)(readRoom(lines)).toMap
@@ -76,11 +76,11 @@ object Room {
     ret
   }
 
-  def readRoom(lines: Iterator[String]): (String,Room) = {
+  def readRoom(lines: Iterator[String]): (String, Room) = {
     val keyword = lines.next()
     val name = lines.next()
     val desc = lines.next()
-    val exits = lines.next().split(",").map(_.toInt)
+    val exits = lines.next.split(",").map(_.trim)
     val items = List.fill(lines.next().toInt)(Item(lines.next(), lines.next()))
     (keyword, new Room(name, desc, exits, items))
   }

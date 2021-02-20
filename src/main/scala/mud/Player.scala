@@ -7,7 +7,7 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
 
 
   //starting location as room 0
-  private var currentLoc = Room.rooms(0)
+  private var currentLoc = Room.rooms("void_")
 
   println("*" * 100 + "\n" + currentLoc.wrap("You are finally awake " + playerName + ". My name is Sif, and I am the " +
     "onboard AI for this ship.  You have been in cryosleep for 5 Earth years since we left Earth. " +
@@ -32,10 +32,10 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
       case "drop" =>
         getFromInventory(subCommands(1)) match {
           case None => println(s"The ${subCommands(1)} item is not in your inventory")
-          case Some(obtainedItem) => currentLoc.dropItem(obtainedItem)
+          case Some(obtainedItem) => currentLoc.dropItem(obtainedItem); println(s"Dropped item ${obtainedItem.itemName}")
         }
       case c if c == "Inventory" || c == "inv" => println(inventoryListing())
-      case c if "nsewup".contains(c.toLowerCase) || Array("north", "east", "south", "west", "up", "down")
+      case c if "nsewup".contains(c.toLowerCase) || Set("north", "east", "south", "west", "up", "down")
         .contains(c.toLowerCase) => move(command)
       case _ => println(s"$command is not a valid command. Please re-enter.")
     }
@@ -67,7 +67,7 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
 
   //Move the player in a particular direction if possible.
   def move(dir: String): Unit = {
-    val goLoc = currentLoc.getExit("nsewud".indexOf(dir(0).toLower))
+    val goLoc = currentLoc.getExit("nsewud".indexOf(dir(0)))
 
     if (goLoc.isDefined) {
       currentLoc = goLoc.get
