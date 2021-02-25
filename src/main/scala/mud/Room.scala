@@ -1,17 +1,18 @@
 package mud
 
+import scala.collection.mutable
 import scala.io.Source
 
 class Room(val name: String,
            val desc: String,
            private val exits: Array[String],
-           private var items: List[Item]) {
+           private var itemsBuf: mutable.Buffer[Item]) {
 
   //Print the complete description of the room.
-  def fullDescription(): Unit = println(s"$name\n${wrap(desc)}\nExits: ${formatExits(exits)}Items: ${formatItem(items)}")
+  def fullDescription(): Unit = println(s"$name\n${wrap(desc)}\nExits: ${formatExits(exits)}Items: ${formatItem(itemsBuf)}")
 
   //Format item names and desc for printing
-  def formatItem(unformattedItems: List[Item]): String = {
+  def formatItem(unformattedItems: mutable.Buffer[Item]): String = {
     var itemStr: String = ""
     for (elem <- unformattedItems) itemStr += elem.itemName + ", "
     if (itemStr == "") itemStr = "None  "
@@ -52,16 +53,16 @@ class Room(val name: String,
 
   // Get item from room if it exists and remove it from the room
   def getItem(itemName: String): Option[Item] = {
-    items.find(_.name.toLowerCase == itemName) match {
+    itemsBuf.find(_.name.toLowerCase == itemName) match {
       case Some(item) =>
-        items = items.patch(items.indexOf(item), Nil, 1)
+        itemsBuf = itemsBuf.patch(itemsBuf.indexOf(item), Nil, 1)
         Some(item)
       case None => None
     }
   }
 
   //Add an item to this room
-  def dropItem(item: Item): Unit = items = item :: items
+  def dropItem(item: Item): Unit = itemsBuf += item
 
 }
 
@@ -81,7 +82,7 @@ object Room {
     val name = lines.next()
     val desc = lines.next()
     val exits = lines.next.split(",").map(_.trim)
-    val items = List.fill(lines.next().toInt)(Item(lines.next(), lines.next()))
+    val items = mutable.Buffer.fill(lines.next().toInt)(Item(lines.next(), lines.next()))
     (keyword, new Room(name, desc, exits, items))
   }
 
