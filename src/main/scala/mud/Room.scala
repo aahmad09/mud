@@ -83,7 +83,7 @@ object Room {
     val desc = lines.next()
     val exits = lines.next.split(",").map(_.trim)
     val items = mutable.Buffer.fill(lines.next().toInt)(Item(lines.next(), lines.next()))
-    (keyword, new Room(name, desc, exits, items))
+    (keyword, new Room(name, desc, exits, items)) //return a tuple of keyword and Room
   }
 
 }

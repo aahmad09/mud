@@ -1,10 +1,12 @@
 package mud
 
 import scala.io.StdIn._
+import scala.collection.mutable
 
-class Player(val playerName: String = readLine("Welcome to my MUD. What is your name?\n").trim(),
-             private var inventory: List[Item] = Nil) {
+class Player(val playerName: String = readLine("Welcome to my MUD. What is your name?\n").trim()) {
 
+  //empty player inventory at start
+  private var inventoryBuf: mutable.Buffer[Item] = mutable.Buffer[Item]()
 
   //starting location as room 0
   private var currentLoc = Room.rooms("void_")
@@ -34,7 +36,7 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
           case None => println(s"The ${subCommands(1)} item is not in your inventory")
           case Some(obtainedItem) => currentLoc.dropItem(obtainedItem); println(s"Dropped item ${obtainedItem.itemName}")
         }
-      case c if c == "Inventory" || c == "inv" => println(inventoryListing())
+      case c if c == "inventory" || c == "inv" => println(inventoryListing())
       case c if "nsewup".contains(c.toLowerCase) || Set("north", "east", "south", "west", "up", "down")
         .contains(c.toLowerCase) => move(command)
       case _ => println(s"$command is not a valid command. Please re-enter.")
@@ -43,9 +45,9 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
 
   //Pull an item out of the inventory if it exists and return it
   def getFromInventory(itemName: String): Option[Item] = {
-    inventory.find(_.itemName.toLowerCase == itemName) match {
+    inventoryBuf.find(_.itemName.toLowerCase == itemName) match {
       case Some(item) =>
-        inventory = inventory.patch(inventory.indexOf(item), Nil, 1)
+        inventoryBuf -= item
         Some(item)
       case None => None
     }
@@ -53,14 +55,14 @@ class Player(val playerName: String = readLine("Welcome to my MUD. What is your 
 
   //Add the given item to inventory
   def addToInventory(item: Item): Unit = {
-    inventory = item :: inventory
+    inventoryBuf += item
     println(s"Added ${item.itemName} to inventory")
   }
 
   //Build a String with the contents of the inventory
   def inventoryListing(): String = {
     var invStr: String = "Inventory:\n"
-    for (elem <- inventory) invStr += s"\t${elem.itemName} - ${elem.itemDesc}\n"
+    for (elem <- inventoryBuf) invStr += s"\t${elem.itemName} - ${elem.itemDesc}\n"
     if (invStr == "Inventory:\n") invStr = "Inventory: Empty"
     invStr
   }
