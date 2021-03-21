@@ -3,19 +3,21 @@ package mud
 import akka.actor.{Actor, ActorRef, Props}
 
 class RoomManager extends Actor {
+
   import RoomManager._
 
   val rooms: Map[String, ActorRef] = readRooms()
-  for (child <- context.children) child ! Room.LinkExits(rooms)
+
+  context.children.foreach(child => child ! Room.LinkExits(rooms))
 
   def receive: Receive = {
     case BeginGame =>
-      sender ! Player.StartRoom(rooms("Void"))
+      sender ! Player.StartRoom(rooms("void_"))
     case m => println("Unhandled message in RoomManager " + m)
   }
 
   def readRooms(): Map[String, ActorRef] = {
-    val xmlData = xml.XML.loadFile("map.xml")
+    val xmlData = xml.XML.loadFile("resources/map.xml")
     (xmlData \ "room").map(readRoom).toMap
   }
 
@@ -31,5 +33,7 @@ class RoomManager extends Actor {
 }
 
 object RoomManager {
+
   case object BeginGame
+
 }

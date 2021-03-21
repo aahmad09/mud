@@ -1,12 +1,35 @@
 package mud
 
-import akka.actor.Actor
+import akka.actor.{Actor, ActorRef, Props}
+
+import java.io.{BufferedReader, PrintStream}
 
 class PlayerManager extends Actor {
 
-  def receive: Receive = {
+  import PlayerManager._
 
+  def receive: Receive = {
+    case CheckInput =>
+      context.children.foreach(child => child ! Player.VerifyInput)
+    case NewUser(name, in, out, roomManager) =>
+      if (context.children.exists(_.path.name == name)) {
+        Console.out.println("Sorry, that username already exists!")
+      } else {
+        val newPlayer = context.actorOf(Props(new Player(name, in, out)), name)
+        Console.out.println("...")
+        newPlayer ! Player.Init(roomManager)
+      }
     case m => println("Unhandled message in PlayerManager " + m)
   }
+
+}
+
+object PlayerManager {
+
+  case class NewUser(name: String, in: BufferedReader, out: PrintStream, roomManager: ActorRef)
+
+  case object CheckInput
+
+  case object Init
 
 }

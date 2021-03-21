@@ -5,16 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/MUD-build.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/MUD-build.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sbt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sbt.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Item.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Item.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/map.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/map.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/scala/mud/TestPlayer.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/scala/mud/TestPlayer.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/scala/mud/TestRoom.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/scala/mud/TestRoom.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +41,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../GitHub (intelliJ)" />
@@ -51,7 +50,7 @@
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="mud.Main" />
       <module name="MUD" />
@@ -65,15 +64,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Scala REPL" type="ScalaScriptConsoleRunConfiguration" factoryName="Scala Console" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="MUD" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="javaOptions" value="-Djline.terminal=NONE" />
+      <option name="myConsoleArgs" value="" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <option name="workingDirectory" value="$PROJECT_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -81,6 +91,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Scala REPL.Scala REPL" />
       </list>
     </recent_temporary>
   </component>
@@ -95,11 +106,37 @@
       <workItem from="1616081407961" duration="134000" />
       <workItem from="1616081571920" duration="903000" />
       <workItem from="1616202343031" duration="3802000" />
-      <workItem from="1616283213939" duration="5990000" />
+      <workItem from="1616283213939" duration="6322000" />
+      <workItem from="1616343489014" duration="6845000" />
     </task>
+    <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
+      <created>1616295577610</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1616295577610</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Working aimlessly at actors" />
+    <MESSAGE value="Working aimlessly at actors (project has errors)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working aimlessly at actors (project has errors)" />
   </component>
 </project>
