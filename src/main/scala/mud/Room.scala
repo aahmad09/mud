@@ -1,18 +1,36 @@
 package mud
 
-import scala.collection.mutable
-import scala.io.Source
+import akka.actor.{Actor, ActorRef}
 
 class Room(val name: String,
            val desc: String,
-           private val exits: Array[String],
-           private var itemsBuf: mutable.Buffer[Item]) {
+           private val exitKeys: Array[String],
+           private var items: List[Item])
+  extends Actor {
+
+  private var exits: Array[Option[ActorRef]] = null
+
+  import Room._
+
+  def receive: Receive = {
+    case LinkExits(rooms) =>
+      exits = exitKeys.map(key => rooms.get(key))
+    case FullDescription =>
+      sender ! Player.PrintMessage(fullDescription())
+    case GetExit(dir) =>
+      sender ! Player.TakeExit(getExit(dir))
+    case GetItem(itemName) =>
+      sender ! Player.PickItem(getItem(itemName))
+    case DropItem(item) =>
+      dropItem(item)
+    case m => println("Unhandled message in Room " + m)
+  }
 
   //Print the complete description of the room.
-  def fullDescription(): Unit = println(s"$name\n${wrap(desc)}\nExits: ${formatExits(exits)}Items: ${formatItem(itemsBuf)}")
+  def fullDescription(): String = s"$name\n${wrap(desc)}\nExits: " + s"${formatExits()}Items: ${formatItem(items)}"
 
   //Format item names and desc for printing
-  def formatItem(unformattedItems: mutable.Buffer[Item]): String = {
+  def formatItem(unformattedItems: List[Item]): String = {
     var itemStr: String = ""
     for (elem <- unformattedItems) itemStr += elem.itemName + ", "
     if (itemStr == "") itemStr = "None  "
@@ -31,59 +49,48 @@ class Room(val name: String,
   }
 
   //Transform exit numbers into direction names for printing
-  def formatExits(unformattedExits: Array[String]): String = {
+  def formatExits(): String = {
     //north=0, south=1, east=2, west=3, up=4, and down=5
     var exitStr: String = ""
 
-    if (unformattedExits(0) != "none") exitStr += "north, "
-    if (unformattedExits(1) != "none") exitStr += "south, "
-    if (unformattedExits(2) != "none") exitStr += "east, "
-    if (unformattedExits(3) != "none") exitStr += "west, "
-    if (unformattedExits(4) != "none") exitStr += "up, "
-    if (unformattedExits(5) != "none") exitStr += "down, "
+    if (exits(0).isDefined) exitStr += "north, "
+    if (exits(1).isDefined) exitStr += "south, "
+    if (exits(2).isDefined) exitStr += "east, "
+    if (exits(3).isDefined) exitStr += "west, "
+    if (exits(4).isDefined) exitStr += "up, "
+    if (exits(5).isDefined) exitStr += "down, "
 
     exitStr.dropRight(2) + "\n"
   }
 
-  //Return the room in a given direction if it exists
-  def getExit(dir: Int): Option[Room] = {
-    if (exits(dir) == "none") None
-    else Some(Room.rooms(exits(dir)))
-  }
+  //Return the actor ref of room in a given direction if it exists
+  def getExit(dir: Int): Option[ActorRef] = exits(dir)
 
   // Get item from room if it exists and remove it from the room
   def getItem(itemName: String): Option[Item] = {
-    itemsBuf.find(_.name.toLowerCase == itemName) match {
+    items.find(_.name.toLowerCase == itemName) match {
       case Some(item) =>
-        itemsBuf = itemsBuf.patch(itemsBuf.indexOf(item), Nil, 1)
+        items = items.patch(items.indexOf(item), Nil, 1)
         Some(item)
       case None => None
     }
   }
 
   //Add an item to this room
-  def dropItem(item: Item): Unit = itemsBuf += item
+  def dropItem(item: Item): Unit = items = item :: items
 
 }
 
 object Room {
-  val rooms: Map[String, Room] = readRooms()
 
-  def readRooms(): Map[String, Room] = {
-    val source = Source.fromFile("resources/map.txt")
-    val lines = source.getLines()
-    val ret = Array.fill(lines.next().toInt)(readRoom(lines)).toMap
-    source.close()
-    ret
-  }
+  case class LinkExits(rooms: Map[String, ActorRef])
 
-  def readRoom(lines: Iterator[String]): (String, Room) = {
-    val keyword = lines.next()
-    val name = lines.next()
-    val desc = lines.next()
-    val exits = lines.next.split(",").map(_.trim)
-    val items = mutable.Buffer.fill(lines.next().toInt)(Item(lines.next(), lines.next()))
-    (keyword, new Room(name, desc, exits, items)) //return a tuple of keyword and Room
-  }
+  case class GetExit(dir: Int)
+
+  case class GetItem(itemName: String)
+
+  case class DropItem(item: Item)
+
+  case object FullDescription
 
 }

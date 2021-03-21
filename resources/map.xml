@@ -1,0 +1,18 @@
+<rooms>
+    <room keyword="void_" name="Void">
+        <description>A dark blanket, contrasting with blacks and yellows, and the occasional white, which is shaped as a circle and sometimes a crescent. The void had brought malefic darkness that enveloped the ship, devouring everything inside the pitch-black curtain. Inside, the air is still and dense, the temperature low, and you can only hear the hum of the engine. There are stars far away in the south which dot the blanket in an ornate pattern. Towards every other direction...nothingness. You need to warp drive to a planet...</description>
+        <exits>none,kudenerth_,none,none,none,none</exits>
+    </room>
+    <room keyword="kudenerth_" name="Planet Kudenerth">
+        <description>You land on the planet. It looks like a tropical planet, filled with unusual plants and creatures you've never seen before.</description>
+        <exits>void_,none,hoth_,none,none,none</exits>
+        <item name="Sword">A huge and long two-handed sword.</item>
+        <item name="Beaburg">A red shaped banana. It seems poisonous.</item>
+        <item name="Boots">They look like they are made of some animal's skin... indications of intelligent life?</item>
+    </room>
+    <room keyword="hoth_" name="Planet Hoth">
+        <description>You land on the planet. At first glance, it seems unlikely that life would exist on this planet. Deserts stretch out till the horizon, strangely beautiful, yet eerily frightening.</description>
+        <exits>-1,-1,-1,Hallway,-1,-1</exits>
+        <item name="Minerals">Shiny gold-like objects.</item>
+    </room>
+</rooms>
