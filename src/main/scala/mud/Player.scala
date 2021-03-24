@@ -3,9 +3,10 @@ package mud
 import akka.actor.{Actor, ActorRef}
 
 import java.io.{BufferedReader, PrintStream}
+import java.net.Socket
 
 class Player(val playerName: String,
-             in: BufferedReader, out: PrintStream)
+             in: BufferedReader, out: PrintStream, sock: Socket)
   extends Actor {
 
   import Player._

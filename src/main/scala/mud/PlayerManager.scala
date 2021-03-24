@@ -3,6 +3,7 @@ package mud
 import akka.actor.{Actor, ActorRef, Props}
 
 import java.io.{BufferedReader, PrintStream}
+import java.net.Socket
 
 class PlayerManager extends Actor {
 
@@ -11,11 +12,12 @@ class PlayerManager extends Actor {
   def receive: Receive = {
     case CheckInput =>
       context.children.foreach(child => child ! Player.VerifyInput)
-    case NewUser(name, in, out, roomManager) =>
+    case NewUser(name, in, out, sock, roomManager) =>
+      println("no") //TODO: rem
       if (context.children.exists(_.path.name == name)) {
         Console.out.println("Sorry, that username already exists!")
       } else {
-        val newPlayer = context.actorOf(Props(new Player(name, in, out)), name)
+        val newPlayer = context.actorOf(Props(new Player(name, in, out, sock)), name)
         Console.out.println("...")
         newPlayer ! Player.Init(roomManager)
       }
@@ -26,7 +28,7 @@ class PlayerManager extends Actor {
 
 object PlayerManager {
 
-  case class NewUser(name: String, in: BufferedReader, out: PrintStream, roomManager: ActorRef)
+  case class NewUser(name: String, in: BufferedReader, out: PrintStream, sock: Socket, roomManager: ActorRef)
 
   case object CheckInput
 
