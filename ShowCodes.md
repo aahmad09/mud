@@ -33,3 +33,8 @@ Personally, I prefer something like the following that completely skips the matc
 ```
 val goLoc = currentLoc.getExit("nsewud".indexOf(dir(0).toLower))
 ```
+
+## Show Code #6 (4 of 4 points)
+
+Code compiles and runs with actors. I noticed an odd delay on the first command that I entered, but it wasn't significant. Also, since you have
+started putting in networking, please remember to print the port number so I won't have to look it up.
