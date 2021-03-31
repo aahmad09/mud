@@ -2,6 +2,8 @@ package mud
 
 import akka.actor.{Actor, ActorRef}
 
+import scala.collection.mutable.ArrayBuffer
+
 class Room(val name: String,
            val desc: String,
            private val exitKeys: Array[String],
@@ -9,6 +11,7 @@ class Room(val name: String,
   extends Actor {
 
   private var exits: Array[Option[ActorRef]] = null
+  private var users: ArrayBuffer[ActorRef] = ArrayBuffer()
 
   import Room._
 
@@ -23,29 +26,48 @@ class Room(val name: String,
       sender ! Player.PickItem(getItem(itemName))
     case DropItem(item) =>
       dropItem(item)
+    case AddPlayer(user: ActorRef) =>
+      users += user
+    case RemovePlayer(user:  ActorRef) =>
+      users -= user
+    case BroadcastInRoom(playerName: String,msg: String) =>
+      users.foreach(_ ! Player.PrintMessage(s"$playerName: $msg"))
     case m => println("Unhandled message in Room " + m)
   }
 
+  //Return the actor ref of room in a given direction if it exists
+  def getExit(dir: Int): Option[ActorRef] = exits(dir)
+
+  // Get item from room if it exists and remove it from the room
+  def getItem(itemName: String): Option[Item] = {
+    items.find(_.name.toLowerCase == itemName) match {
+      case Some(item) =>
+        items = items.patch(items.indexOf(item), Nil, 1)
+        Some(item)
+      case None => None
+    }
+  }
+
   //Print the complete description of the room.
-  def fullDescription(): String = s"$name\n${wrap(desc)}\nExits: " + s"${formatExits()}Items: ${formatItem(items)}"
+  def fullDescription(): String = s"$name\n$desc\nExits: ${formatExits()}Items: ${formatItem(items)} " +
+    s"\nPlayers in this room: ${formatPlayers(users)}"
+
+  //Add an item to this room
+  def dropItem(item: Item): Unit = items = item :: items
+
+  def formatPlayers(unformattedList: ArrayBuffer[ActorRef]): String = {
+    var ret = ""
+    for (playerName <- unformattedList) ret += playerName.path.name + ", "
+    if (ret == "") ret = "None  "
+    ret.dropRight(2)
+  }
 
   //Format item names and desc for printing
   def formatItem(unformattedItems: List[Item]): String = {
-    var itemStr: String = ""
-    for (elem <- unformattedItems) itemStr += elem.itemName + ", "
-    if (itemStr == "") itemStr = "None  "
-    itemStr.dropRight(2)
-  }
-
-  def wrap(input: String, maxLength: Int = 100): String = {
-    input.split(" ").foldLeft(("", 0))(
-      (acc, in) =>
-        if (in equals "") acc else if ((acc._2 + in.length()) < maxLength) {
-          (acc._1 + " " + in, acc._2 + in.length())
-        }
-        else {
-          (acc._1 + '\n' + in, in.length())
-        })._1.trim
+    var ret: String = ""
+    for (elem <- unformattedItems) ret += elem.itemName + ", "
+    if (ret == "") ret = "None  "
+    ret.dropRight(2)
   }
 
   //Transform exit numbers into direction names for printing
@@ -63,22 +85,6 @@ class Room(val name: String,
     exitStr.dropRight(2) + "\n"
   }
 
-  //Return the actor ref of room in a given direction if it exists
-  def getExit(dir: Int): Option[ActorRef] = exits(dir)
-
-  // Get item from room if it exists and remove it from the room
-  def getItem(itemName: String): Option[Item] = {
-    items.find(_.name.toLowerCase == itemName) match {
-      case Some(item) =>
-        items = items.patch(items.indexOf(item), Nil, 1)
-        Some(item)
-      case None => None
-    }
-  }
-
-  //Add an item to this room
-  def dropItem(item: Item): Unit = items = item :: items
-
 }
 
 object Room {
@@ -87,10 +93,18 @@ object Room {
 
   case class GetExit(dir: Int)
 
+  case object FullDescription
+
   case class GetItem(itemName: String)
 
   case class DropItem(item: Item)
 
-  case object FullDescription
+  case class AddPlayer(user: ActorRef)
+
+  case class RemovePlayer(user: ActorRef)
+
+  case class PlayersInRoom(user: ActorRef)
+
+  case class BroadcastInRoom(playerName:String, msg: String)
 
 }

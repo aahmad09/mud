@@ -17,30 +17,31 @@ class Player(val playerName: String,
   private var currentLoc: ActorRef = null
 
   def receive: Receive = {
-    case VerifyInput => {
+    case VerifyInput =>
       if (in.ready()) {
-        out.println("...")
-        processCommand(in.readLine().toLowerCase) //TODO this may cause problems in the future
+        processCommand(in.readLine())
       }
-    }
     case Init(roomManager) =>
       roomManager ! RoomManager.BeginGame
-      out.println(wrap("You are finally awake " + playerName + ". My name is Sif, and I am the " +
+      out.println("You are finally awake " + playerName + ". My name is Sif, and I am the " +
         "onboard AI for this ship.  You have been in cryosleep for 5 Earth years since we left Earth. " +
         "Let me give you a summary of what happened. We left Earth in 2055 with our mission to reach Planet X. As soon as " +
         "we crossed Mars, you went into cryosleep just before our scheduled warp drive. Although the warp drive was " +
         "successful, it did not send us to Planet X, and now we are stuck at the outer edge of M32 galaxy. Where would you " +
-        "like to warp drive now?\n..."))
-      Thread.sleep(3000)
+        "like to warp drive now?\n")
+      Thread.sleep(2000)
     case StartRoom(room: ActorRef) =>
       currentLoc = room
+      currentLoc ! Room.AddPlayer(self)
       currentLoc ! Room.FullDescription
     case PrintMessage(msg) =>
       out.println(msg)
     case TakeExit(oroom) =>
       oroom match {
         case Some(pos) =>
+          currentLoc ! Room.RemovePlayer(self)
           currentLoc = pos
+          currentLoc ! Room.AddPlayer(self)
           currentLoc ! Room.FullDescription
         case None =>
           out.println("Invalid exit")
@@ -51,24 +52,26 @@ class Player(val playerName: String,
           addToInventory(thing)
         case None => out.println(s"This item is not in the room")
       }
+
     case m => out.println("Unhandled message in Player " + m)
   }
 
   //Parse and act on a command
   def processCommand(command: String): Unit = {
-    val subCommands = command.split(" ")
-    subCommands(0) match {
+    val subCommands = command.split(" ",2)
+    val mainCommand = subCommands(0).toLowerCase()
+    mainCommand match {
       case "exit" =>
         out.println(s"Goodbye $playerName!")
         sys.exit(0)
       case "help" =>
-        printHelp()
+        self ! Player.PrintMessage(printHelp())
       case "look" =>
         currentLoc ! Room.FullDescription
       case "get" =>
-        currentLoc ! Room.GetItem(subCommands(1))
+        currentLoc ! Room.GetItem(subCommands(1).toLowerCase())
       case "drop" =>
-        getFromInventory(subCommands(1)) match {
+        getFromInventory(subCommands(1).toLowerCase()) match {
           case None => out.println(s"The ${subCommands(1)} item is not in your inventory")
           case Some(obtainedItem) => currentLoc ! Room.DropItem(obtainedItem)
             out.println(s"Dropped ${obtainedItem.itemName}")
@@ -77,6 +80,8 @@ class Player(val playerName: String,
         out.println(inventoryListing())
       case c if "nsewup".contains(c.toLowerCase) || Set("north", "east", "south", "west", "up", "down").contains(c) =>
         move(command)
+      case "say" => currentLoc ! Room.BroadcastInRoom(playerName, subCommands(1))
+      case "tell" => ???
       case _ =>
         out.println(s"$command is not a valid command. Please re-enter.")
     }
@@ -103,7 +108,7 @@ class Player(val playerName: String,
 
   //Move the player in a particular direction if possible.
   def move(dir: String): Unit = {
-    "nsewud".indexOf(dir(0)) match {
+    "nsewud".indexOf(dir.toLowerCase()(0)) match {
       case 0 => currentLoc ! Room.GetExit(0)
       case 1 => currentLoc ! Room.GetExit(1)
       case 2 => currentLoc ! Room.GetExit(2)
@@ -114,7 +119,7 @@ class Player(val playerName: String,
   }
 
   //print a list of possible commands
-  def printHelp(): Unit = println(
+  def printHelp(): String =
     """Sif supports the following commands:
 'north', 'south', 'east', 'west', 'up', 'down' - for warp drive in a direction
 'look' - get the full description of the current region
@@ -122,24 +127,12 @@ class Player(val playerName: String,
 get 'item' - get an item from the planet and add it to your spaceship's inventory
 drop 'item' -  drop an item from your spaceship's inventory into the void or the planet
 exit - leave the game
-help - print a list of commands and their description.""")
+help - print a list of commands and their description."""
 
   //Add the given item to inventory
   def addToInventory(item: Item): Unit = {
     inventory = item :: inventory
     out.println(s"Added ${item.itemName} to inventory")
-  }
-
-  //make it so this method isn't repeated
-  def wrap(input: String, maxLength: Int = 100): String = {
-    input.split(" ").foldLeft(("", 0))(
-      (acc, in) =>
-        if (in equals "") acc else if ((acc._2 + in.length()) < maxLength) {
-          (acc._1 + " " + in, acc._2 + in.length())
-        }
-        else {
-          (acc._1 + '\n' + in, in.length())
-        })._1.trim
   }
 
 }
@@ -158,4 +151,7 @@ object Player {
 
   case object VerifyInput
 
+//  case object GetName
+
 }
+
