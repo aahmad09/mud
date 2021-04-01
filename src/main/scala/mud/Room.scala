@@ -28,11 +28,11 @@ class Room(val name: String,
       dropItem(item)
     case AddPlayer(user: ActorRef) =>
       users += user
-    case RemovePlayer(user:  ActorRef) =>
+    case RemovePlayer(user: ActorRef) =>
       users -= user
-    case BroadcastInRoom(playerName: String,msg: String) =>
-      users.foreach(_ ! Player.PrintMessage(s"$playerName: $msg"))
-    case m => println("Unhandled message in Room " + m)
+    case BroadcastInRoom(playerName: String, msg: String) =>
+      users.foreach(_ ! Player.PrintMessage(s"*** $playerName $msg ***"))
+     case m => println("Unhandled message in Room " + m)
   }
 
   //Return the actor ref of room in a given direction if it exists
@@ -105,6 +105,6 @@ object Room {
 
   case class PlayersInRoom(user: ActorRef)
 
-  case class BroadcastInRoom(playerName:String, msg: String)
-
+  case class BroadcastInRoom(playerName: String, msg: String)
 }
+

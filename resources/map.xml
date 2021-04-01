@@ -4,7 +4,7 @@
         <exits>none,kudenerth_,none,none,none,none</exits>
     </room>
     <room keyword="kudenerth_" name="Planet Kudenerth">
-        <description>You land on the planet. It looks like a tropical planet, filled with unusual plants and creatures you've never seen before. Tall, lush, green trees surround you.</description>
+        <description>You land on the planet. It looks like a tropical planet, filled with unusual plants and creatures you've never seen before. Tall, lush, orange trees surround you.</description>
         <exits>void_,none,hoth_,none,none,none</exits>
         <item name="Sword">A huge and long two-handed sword.</item>
         <item name="Beaburg">A red shaped banana. It seems poisonous.</item>

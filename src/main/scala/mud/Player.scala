@@ -40,9 +40,11 @@ class Player(val playerName: String,
       oroom match {
         case Some(pos) =>
           currentLoc ! Room.RemovePlayer(self)
+          currentLoc ! Room.BroadcastInRoom(playerName, "exited this room")
           currentLoc = pos
           currentLoc ! Room.AddPlayer(self)
           currentLoc ! Room.FullDescription
+          currentLoc ! Room.BroadcastInRoom(playerName, "entered this room")
         case None =>
           out.println("Invalid exit")
       }
@@ -50,20 +52,21 @@ class Player(val playerName: String,
       oitem match {
         case Some(thing) =>
           addToInventory(thing)
+          currentLoc ! Room.BroadcastInRoom(playerName, s"added ${thing.itemName} to their inventory")
         case None => out.println(s"This item is not in the room")
       }
-
+    case GetCurrentRoom =>
+      sender ! currentLoc
     case m => out.println("Unhandled message in Player " + m)
   }
 
   //Parse and act on a command
   def processCommand(command: String): Unit = {
     val subCommands = command.split(" ",2)
-    val mainCommand = subCommands(0).toLowerCase()
-    mainCommand match {
+    subCommands(0).toLowerCase match {
       case "exit" =>
         out.println(s"Goodbye $playerName!")
-        sys.exit(0)
+        context.stop(self)
       case "help" =>
         self ! Player.PrintMessage(printHelp())
       case "look" =>
@@ -74,14 +77,16 @@ class Player(val playerName: String,
         getFromInventory(subCommands(1).toLowerCase()) match {
           case None => out.println(s"The ${subCommands(1)} item is not in your inventory")
           case Some(obtainedItem) => currentLoc ! Room.DropItem(obtainedItem)
-            out.println(s"Dropped ${obtainedItem.itemName}")
+            currentLoc ! Room.BroadcastInRoom(playerName, s"dropped the item ${obtainedItem.itemName}")
         }
       case c if c == "inventory" || c == "inv" =>
         out.println(inventoryListing())
       case c if "nsewup".contains(c.toLowerCase) || Set("north", "east", "south", "west", "up", "down").contains(c) =>
         move(command)
-      case "say" => currentLoc ! Room.BroadcastInRoom(playerName, subCommands(1))
-      case "tell" => ???
+      case "say" => currentLoc ! Room.BroadcastInRoom(playerName, ": "+subCommands(1))
+      case "tell" => val recieverAndMessage = subCommands(1).split(" ", 2)
+        context.parent ! PlayerManager.PrivateMessage(self, recieverAndMessage(0), recieverAndMessage(1))
+      case "locate" => context.parent ! PlayerManager.LocatePlayer(subCommands(1))
       case _ =>
         out.println(s"$command is not a valid command. Please re-enter.")
     }
@@ -132,7 +137,6 @@ help - print a list of commands and their description."""
   //Add the given item to inventory
   def addToInventory(item: Item): Unit = {
     inventory = item :: inventory
-    out.println(s"Added ${item.itemName} to inventory")
   }
 
 }
@@ -151,7 +155,7 @@ object Player {
 
   case object VerifyInput
 
-//  case object GetName
+  case object GetCurrentRoom
 
 }
 
