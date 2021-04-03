@@ -1,6 +1,6 @@
 package mud
 
-import akka.actor.{Actor, ActorRef, PoisonPill, Props}
+import akka.actor.{Actor, ActorRef, Props}
 import mud.Player.GetCurrentRoom
 
 import java.io.{BufferedReader, PrintStream}
@@ -17,7 +17,8 @@ class PlayerManager extends Actor {
       context.children.foreach(child => child ! Player.VerifyInput)
     case NewUser(name, in, out, sock, roomManager) =>
       if (context.children.exists(_.path.name == name)) {
-        Console.out.println("Sorry, that username already exists!")
+        out.println("Sorry, that username already exists!")
+        sock.close()
       } else {
         val newPlayer = context.actorOf(Props(new Player(name, in, out, sock)), name)
         newPlayer ! Player.Init(roomManager)

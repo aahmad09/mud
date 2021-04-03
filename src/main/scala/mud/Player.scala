@@ -11,8 +11,8 @@ class Player(val playerName: String,
 
   import Player._
 
-  //empty player inventory at start
-  private var inventory: List[Item] = Nil
+  //empty player inventory at start implemented as a mutable doubly linked list
+  private var inventory: MutableDLList[Item] = new MutableDLList[Item]
 
   private var currentLoc: ActorRef = null
 
@@ -66,6 +66,7 @@ class Player(val playerName: String,
     subCommands(0).toLowerCase match {
       case "exit" =>
         out.println(s"Goodbye $playerName!")
+        sock.close()
         context.stop(self)
       case "help" =>
         self ! Player.PrintMessage(printHelp())
@@ -97,7 +98,8 @@ class Player(val playerName: String,
   def getFromInventory(itemName: String): Option[Item] = {
     inventory.find(_.itemName.toLowerCase == itemName) match {
       case Some(item) =>
-        inventory = inventory.patch(inventory.indexOf(item), Nil, 1)
+        inventory.remove(inventory.indexOf(item))
+        //          inventory.patch(inventory.indexOf(item), Nil, 1)
         Some(item)
       case None => None
     }
@@ -136,7 +138,7 @@ help - print a list of commands and their description."""
 
   //Add the given item to inventory
   def addToInventory(item: Item): Unit = {
-    inventory = item :: inventory
+    inventory += item
   }
 
 }

@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2021_4_51_PM_[Default_Changelist]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2021_4_51_PM__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/map.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +119,10 @@
       <workItem from="1616967449099" duration="1196000" />
       <workItem from="1617064776507" duration="32000" />
       <workItem from="1617217500803" duration="8548000" />
-      <workItem from="1617231775597" duration="4904000" />
+      <workItem from="1617231775597" duration="5030000" />
+      <workItem from="1617290041298" duration="1593000" />
+      <workItem from="1617395965710" duration="127000" />
+      <workItem from="1617483044142" duration="1008000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -153,7 +152,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617227418591</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Implemented Networked MUD">
+      <created>1617236810589</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1617236810589</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
