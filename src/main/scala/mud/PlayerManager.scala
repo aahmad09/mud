@@ -1,7 +1,6 @@
 package mud
 
 import akka.actor.{Actor, ActorRef, Props}
-import mud.Player.GetCurrentRoom
 
 import java.io.{BufferedReader, PrintStream}
 import java.net.Socket
@@ -24,10 +23,10 @@ class PlayerManager extends Actor {
         newPlayer ! Player.Init(roomManager)
         playersMap += name -> newPlayer
       }
-    case PrivateMessage(sender, receiver,  msg) =>
+    case PrivateMessage(sender, receiver, msg) =>
       playersMap(receiver) ! Player.PrintMessage(sender.path.name + " whispered " + msg)
-    case LocatePlayer(player) => //TODO: implement correctly
-      if (playersMap.contains(player)) sender ! Player.PrintMessage((playersMap(player) ! GetCurrentRoom).toString)
+    case RemovePlayer(player) =>
+      playersMap - player
     case m => println("Unhandled message in PlayerManager " + m)
   }
 
@@ -37,13 +36,12 @@ object PlayerManager {
 
   case class NewUser(name: String, in: BufferedReader, out: PrintStream, sock: Socket, roomManager: ActorRef)
 
+  case class PrivateMessage(sender: ActorRef, receiver: String, msg: String)
+
   case object Init
 
   case object CheckInput
 
-  case class PrivateMessage(sender: ActorRef, receiver: String, msg: String)
-
-  case class LocatePlayer(player: String)
-
+  case class RemovePlayer(player: String)
 }
 

@@ -1,5 +1,9 @@
 package mud
 
+/**
+* shows player even after exit
+**/
+
 import akka.actor.{ActorSystem, Props}
 
 import java.io.{BufferedReader, InputStreamReader, PrintStream}

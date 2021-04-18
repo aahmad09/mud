@@ -12,7 +12,7 @@ class Player(val playerName: String,
   import Player._
 
   //empty player inventory at start implemented as a mutable doubly linked list
-  private var inventory: MutableDLList[Item] = new MutableDLList[Item]
+  private val inventory: MutableDLList[Item] = new MutableDLList[Item]
 
   private var currentLoc: ActorRef = null
 
@@ -62,7 +62,7 @@ class Player(val playerName: String,
 
   //Parse and act on a command
   def processCommand(command: String): Unit = {
-    val subCommands = command.split(" ",2)
+    val subCommands = command.split(" ", 2)
     subCommands(0).toLowerCase match {
       case "exit" =>
         out.println(s"Goodbye $playerName!")
@@ -84,10 +84,12 @@ class Player(val playerName: String,
         out.println(inventoryListing())
       case c if "nsewup".contains(c.toLowerCase) || Set("north", "east", "south", "west", "up", "down").contains(c) =>
         move(command)
-      case "say" => currentLoc ! Room.BroadcastInRoom(playerName, ": "+subCommands(1))
+      case "say" => currentLoc ! Room.BroadcastInRoom(playerName, ": " + subCommands(1))
       case "tell" => val recieverAndMessage = subCommands(1).split(" ", 2)
         context.parent ! PlayerManager.PrivateMessage(self, recieverAndMessage(0), recieverAndMessage(1))
-      case "locate" => context.parent ! PlayerManager.LocatePlayer(subCommands(1))
+      case "exit" => context.parent ! PlayerManager.RemovePlayer(playerName)
+        currentLoc ! Room.RemovePlayer(self)
+        context.stop(self)
       case _ =>
         out.println(s"$command is not a valid command. Please re-enter.")
     }

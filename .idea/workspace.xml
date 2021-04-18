@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="">
+    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Implemented D-LinkedList for Player Inventory">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2021_4_51_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2021_4_51_PM__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +31,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
   </component>
@@ -40,10 +54,16 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../GitHub (intelliJ)" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="Main" />
+    </option>
   </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
@@ -72,11 +92,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Scala REPL" type="ScalaScriptConsoleRunConfiguration" factoryName="Scala Console" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="MUD" />
       <option name="allowRunningInParallel" value="false" />
       <option name="javaOptions" value="-Djline.terminal=NONE" />
       <option name="myConsoleArgs" value="" />
+      <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
       </option>
@@ -94,6 +126,9 @@
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SuggestScalaFmt">
+    <option name="enableForCurrentProject" value="false" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="" />
@@ -123,6 +158,23 @@
       <workItem from="1617290041298" duration="1593000" />
       <workItem from="1617395965710" duration="127000" />
       <workItem from="1617483044142" duration="1008000" />
+      <workItem from="1617484117985" duration="1540000" />
+      <workItem from="1617567844358" duration="300000" />
+      <workItem from="1617571304067" duration="5000" />
+      <workItem from="1617721183033" duration="1593000" />
+      <workItem from="1617894445829" duration="17000" />
+      <workItem from="1618078545213" duration="85000" />
+      <workItem from="1618080726949" duration="595000" />
+      <workItem from="1618105862617" duration="538000" />
+      <workItem from="1618112836491" duration="541000" />
+      <workItem from="1618173483120" duration="720000" />
+      <workItem from="1618184424596" duration="104000" />
+      <workItem from="1618191064715" duration="17000" />
+      <workItem from="1618436284803" duration="638000" />
+      <workItem from="1618520034820" duration="1383000" />
+      <workItem from="1618616647666" duration="15000" />
+      <workItem from="1618677691892" duration="163000" />
+      <workItem from="1618768127222" duration="4886000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -159,7 +211,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617236810589</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Implemented D-LinkedList for Player Inventory">
+      <created>1617484355305</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1617484355305</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,6 +243,7 @@
     <MESSAGE value="Modified Main for Networked MUD" />
     <MESSAGE value="BroadCast message is working" />
     <MESSAGE value="Implemented Networked MUD" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented Networked MUD" />
+    <MESSAGE value="Implemented D-LinkedList for Player Inventory" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented D-LinkedList for Player Inventory" />
   </component>
 </project>

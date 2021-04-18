@@ -11,7 +11,7 @@ class Room(val name: String,
   extends Actor {
 
   private var exits: Array[Option[ActorRef]] = null
-  private var users: ArrayBuffer[ActorRef] = ArrayBuffer()
+  private val users: ArrayBuffer[ActorRef] = ArrayBuffer()
 
   import Room._
 
@@ -29,10 +29,13 @@ class Room(val name: String,
     case AddPlayer(user: ActorRef) =>
       users += user
     case RemovePlayer(user: ActorRef) =>
+      println(user)
+      println(users.mkString(", "))
       users -= user
+      println(users.mkString(", "))
     case BroadcastInRoom(playerName: String, msg: String) =>
       users.foreach(_ ! Player.PrintMessage(s"*** $playerName $msg ***"))
-     case m => println("Unhandled message in Room " + m)
+    case m => println("Unhandled message in Room " + m)
   }
 
   //Return the actor ref of room in a given direction if it exists
@@ -51,9 +54,6 @@ class Room(val name: String,
   //Print the complete description of the room.
   def fullDescription(): String = s"$name\n$desc\nExits: ${formatExits()}Items: ${formatItem(items)} " +
     s"\nPlayers in this room: ${formatPlayers(users)}"
-
-  //Add an item to this room
-  def dropItem(item: Item): Unit = items = item :: items
 
   def formatPlayers(unformattedList: ArrayBuffer[ActorRef]): String = {
     var ret = ""
@@ -85,6 +85,9 @@ class Room(val name: String,
     exitStr.dropRight(2) + "\n"
   }
 
+  //Add an item to this room
+  def dropItem(item: Item): Unit = items = item :: items
+
 }
 
 object Room {
@@ -92,8 +95,6 @@ object Room {
   case class LinkExits(rooms: Map[String, ActorRef])
 
   case class GetExit(dir: Int)
-
-  case object FullDescription
 
   case class GetItem(itemName: String)
 
@@ -106,5 +107,8 @@ object Room {
   case class PlayersInRoom(user: ActorRef)
 
   case class BroadcastInRoom(playerName: String, msg: String)
+
+  case object FullDescription
+
 }
 
