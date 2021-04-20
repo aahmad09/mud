@@ -9,10 +9,17 @@
         <item name="Sword">A huge and long two-handed sword.</item>
         <item name="Beaburg">A red shaped banana. It seems poisonous.</item>
         <item name="Boots">They look like they are made of some animal's skin... indications of intelligent life?</item>
+        <npc name="Coni">Coni has six spider-like legs and eight black eyes. She wears current fashion and carries a tablet computer. Coni dislikes anyone bigger than her.</npc>
+        <npc name="Joane"> Halfling Paladin. Joane has red hair and light amber eyes, and a flat nose. She wears banded mail and wields a spear and shield.</npc>
     </room>
     <room keyword="hoth_" name="Planet Hoth">
         <description>You land on the planet. At first glance, it seems unlikely that life would exist on this planet. Deserts stretch out till the horizon, strangely beautiful, yet eerily frightening.</description>
-        <exits>-1,-1,-1,kudenerth_,-1,-1</exits>
+        <exits>-1,-1,-1,kudenerth_,-1,zennla_</exits>
         <item name="Minerals">Shiny gold-like objects.</item>
+    </room>
+    <room keyword="zennla_" name="Planet Zenn-La">
+        <description>You land on the planet. It seems like this planet is an ocean planet. The corals underwater have the same shapes as the surface organisms, almost as if they want to mimic them as closely as they can. But these shapes server their purpose. Much like the trees on Earth grow leafed branches, the corals on this planet grow to huge size and have branches with specialized polyps. Small, bioluminescent creatures lurk in the depths. </description>
+        <exits>-1,-1,-1,-1,hoth_,-1</exits>
+        <item name="Crystal clear liquid">Is it suitable for drinking? You would have to test it.</item>
     </room>
 </rooms>

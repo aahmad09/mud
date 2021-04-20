@@ -38,10 +38,10 @@ object PlayerManager {
 
   case class PrivateMessage(sender: ActorRef, receiver: String, msg: String)
 
+  case class RemovePlayer(player: String)
+
   case object Init
 
   case object CheckInput
-
-  case class RemovePlayer(player: String)
 }
 

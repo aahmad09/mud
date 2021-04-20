@@ -1,18 +1,18 @@
 package mud
 
 import akka.actor.{Actor, ActorRef, Props}
+import mud.NPCManager.CreateNPC
 
 class RoomManager extends Actor {
 
   import RoomManager._
 
-  val rooms: Map[String, ActorRef] = readRooms()
-
-  context.children.foreach(child => child ! Room.LinkExits(rooms))
+  val roomsMap: Map[String, ActorRef] = readRooms()
+  context.children.foreach(child => child ! Room.LinkExits(roomsMap))
 
   def receive: Receive = {
     case BeginGame =>
-      sender ! Player.StartRoom(rooms("void_"))
+      sender ! Player.StartRoom(roomsMap("void_"))
     case m => println("Unhandled message in RoomManager " + m)
   }
 
@@ -27,7 +27,12 @@ class RoomManager extends Actor {
     val desc = (node \ "description").text
     val exits = (node \ "exits").text.split(",")
     val items = (node \ "item").map(n => Item((n \ "@name").text, n.text)).toList
-    key -> context.actorOf(Props(new Room(name, desc, exits, items)), key)
+    val ret = key -> context.actorOf(Props(new Room(name, desc, exits, items)), key)
+    val npcs = (node \ "npc").map(n => new NPC((n \ "@name").text, ret._2)).toList
+    npcs.foreach { npc =>
+      Main.npcManager ! CreateNPC(npc.npcName, ret._2)
+    }
+    ret
   }
 
 }

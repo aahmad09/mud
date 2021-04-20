@@ -57,6 +57,7 @@ class Player(val playerName: String,
       }
     case GetCurrentRoom =>
       sender ! currentLoc
+
     case m => out.println("Unhandled message in Player " + m)
   }
 
@@ -160,6 +161,8 @@ object Player {
   case object VerifyInput
 
   case object GetCurrentRoom
+
+  case class MoveRoom(room: ActorRef)
 
 }
 

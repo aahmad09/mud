@@ -10,8 +10,8 @@ class Room(val name: String,
            private var items: List[Item])
   extends Actor {
 
-  private var exits: Array[Option[ActorRef]] = null
   private val users: ArrayBuffer[ActorRef] = ArrayBuffer()
+  private var exits: Array[Option[ActorRef]] = null
 
   import Room._
 

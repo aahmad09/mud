@@ -3,8 +3,8 @@ package mud
 import scala.collection.mutable
 
 class MutableDLList[A] extends mutable.Buffer[A] {
-  private var default: A = _
   private val end = new Node(default, null, null)
+  private var default: A = _
   private var numElems = 0
 
   def +=:(elem: A): MutableDLList.this.type = {
@@ -14,6 +14,7 @@ class MutableDLList[A] extends mutable.Buffer[A] {
     numElems += 1
     this
   }
+
   end.next = end
   end.prev = end
 
@@ -94,14 +95,6 @@ class MutableDLList[A] extends mutable.Buffer[A] {
     ret
   }
 
-  def +=(elem: A): MutableDLList.this.type = {
-    val newNode = new Node(elem, end.prev, end)
-    end.prev.next = newNode
-    end.prev = newNode
-    numElems += 1
-    this
-  }
-
   def myMap[B](f: A => B): MutableDLList[B] = {
     val ret = new MutableDLList[B]()
     var rover = end.next
@@ -110,6 +103,14 @@ class MutableDLList[A] extends mutable.Buffer[A] {
       rover = rover.next
     }
     ret
+  }
+
+  def +=(elem: A): MutableDLList.this.type = {
+    val newNode = new Node(elem, end.prev, end)
+    end.prev.next = newNode
+    end.prev = newNode
+    numElems += 1
+    this
   }
 
   override def toString: String = mkString("MutableDLList(", ", ", ")")

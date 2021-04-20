@@ -4,16 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Implemented D-LinkedList for Player Inventory">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2021_4_51_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_3_31_2021_4_51_PM__Default_Changelist_.xml" beforeDir="false" />
+    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Stubs for PQ and NPC">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/map.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/PriorityQueue.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/PriorityQueue.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,17 +95,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Scala REPL" type="ScalaScriptConsoleRunConfiguration" factoryName="Scala Console" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="MUD" />
       <option name="allowRunningInParallel" value="false" />
@@ -174,7 +166,10 @@
       <workItem from="1618520034820" duration="1383000" />
       <workItem from="1618616647666" duration="15000" />
       <workItem from="1618677691892" duration="163000" />
-      <workItem from="1618768127222" duration="4886000" />
+      <workItem from="1618768127222" duration="6563000" />
+      <workItem from="1618856469198" duration="7568000" />
+      <workItem from="1618930776595" duration="3420000" />
+      <workItem from="1618940222961" duration="6114000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -218,7 +213,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617484355305</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Stubs for PQ and NPC">
+      <created>1618773258278</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1618773258278</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,6 +246,7 @@
     <MESSAGE value="BroadCast message is working" />
     <MESSAGE value="Implemented Networked MUD" />
     <MESSAGE value="Implemented D-LinkedList for Player Inventory" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented D-LinkedList for Player Inventory" />
+    <MESSAGE value="Stubs for PQ and NPC" />
+    <option name="LAST_COMMIT_MESSAGE" value="Stubs for PQ and NPC" />
   </component>
 </project>

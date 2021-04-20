@@ -1,21 +1,19 @@
 package mud
 
 //sorted pq
-class PriorityQueue[A](comp: (A, A) => Int) {
+class PriorityQueue[A](comp: (A, A) => Boolean) {
   private var default: A = _
-
-  private class Node(var data: A, var prev: Node, var next: Node)
-
   private val end = new Node(default, null, null)
-  end.next = end
-  end.prev = end
 
   def enqueue(obj: A): Unit = {
     var rover = end.prev
-    while (rover != end && comp(obj, rover.data) > 0) rover = rover.prev
+    while (rover != end && comp(obj, rover.data)) rover = rover.prev
     rover.next.prev = new Node(obj, rover, rover.next)
     rover.next = rover.next.prev
   }
+
+  end.next = end
+  end.prev = end
 
   def dequeue(): A = {
     val ret = end.next.data
@@ -38,5 +36,7 @@ class PriorityQueue[A](comp: (A, A) => Int) {
       rover = rover.next
     }
   }
+
+  private class Node(var data: A, var prev: Node, var next: Node)
 
 }
