@@ -10,7 +10,7 @@ class Room(val name: String,
            private var items: List[Item])
   extends Actor {
 
-  private val users: ArrayBuffer[ActorRef] = ArrayBuffer()
+  private val characters: ArrayBuffer[ActorRef] = ArrayBuffer()
   private var exits: Array[Option[ActorRef]] = null
 
   import Room._
@@ -22,19 +22,18 @@ class Room(val name: String,
       sender ! Player.PrintMessage(fullDescription())
     case GetExit(dir) =>
       sender ! Player.TakeExit(getExit(dir))
+    case GetNPCExit(dir) =>
+      sender ! NPC.TakeExit(getExit(dir))
     case GetItem(itemName) =>
       sender ! Player.PickItem(getItem(itemName))
     case DropItem(item) =>
       dropItem(item)
-    case AddPlayer(user: ActorRef) =>
-      users += user
-    case RemovePlayer(user: ActorRef) =>
-      println(user)
-      println(users.mkString(", "))
-      users -= user
-      println(users.mkString(", "))
+    case AddCharacter(user: ActorRef) =>
+      characters += user
+    case RemoveCharacter(user: ActorRef) => //TODO: remove player from room when they disconnect
+      characters -= user
     case BroadcastInRoom(playerName: String, msg: String) =>
-      users.foreach(_ ! Player.PrintMessage(s"*** $playerName $msg ***"))
+      characters.foreach(_ ! Player.PrintMessage(s"*** $playerName $msg ***"))
     case m => println("Unhandled message in Room " + m)
   }
 
@@ -53,11 +52,11 @@ class Room(val name: String,
 
   //Print the complete description of the room.
   def fullDescription(): String = s"$name\n$desc\nExits: ${formatExits()}Items: ${formatItem(items)} " +
-    s"\nPlayers in this room: ${formatPlayers(users)}"
+    s"\nCharacters in this room: ${formatCharacters(characters)}"
 
-  def formatPlayers(unformattedList: ArrayBuffer[ActorRef]): String = {
+  def formatCharacters(unformattedList: ArrayBuffer[ActorRef]): String = {
     var ret = ""
-    for (playerName <- unformattedList) ret += playerName.path.name + ", "
+    for (characterName <- unformattedList) ret += characterName.path.name + ", "
     if (ret == "") ret = "None  "
     ret.dropRight(2)
   }
@@ -96,15 +95,15 @@ object Room {
 
   case class GetExit(dir: Int)
 
+  case class GetNPCExit(dir: Int)
+
   case class GetItem(itemName: String)
 
   case class DropItem(item: Item)
 
-  case class AddPlayer(user: ActorRef)
+  case class AddCharacter(user: ActorRef)
 
-  case class RemovePlayer(user: ActorRef)
-
-  case class PlayersInRoom(user: ActorRef)
+  case class RemoveCharacter(user: ActorRef)
 
   case class BroadcastInRoom(playerName: String, msg: String)
 

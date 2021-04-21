@@ -32,28 +32,28 @@ class Player(val playerName: String,
       Thread.sleep(2000)
     case StartRoom(room: ActorRef) =>
       currentLoc = room
-      currentLoc ! Room.AddPlayer(self)
+      currentLoc ! Room.AddCharacter(self)
       currentLoc ! Room.FullDescription
     case PrintMessage(msg) =>
       out.println(msg)
     case TakeExit(oroom) =>
       oroom match {
         case Some(pos) =>
-          currentLoc ! Room.RemovePlayer(self)
-          currentLoc ! Room.BroadcastInRoom(playerName, "exited this room")
+          currentLoc ! Room.RemoveCharacter(self)
+          currentLoc ! Room.BroadcastInRoom(playerName, "departed from this planet")
           currentLoc = pos
-          currentLoc ! Room.AddPlayer(self)
+          currentLoc ! Room.AddCharacter(self)
           currentLoc ! Room.FullDescription
-          currentLoc ! Room.BroadcastInRoom(playerName, "entered this room")
+          currentLoc ! Room.BroadcastInRoom(playerName, "arrived at this planet")
         case None =>
-          out.println("Invalid exit")
+          out.println("Region does not exist")
       }
     case PickItem(oitem) =>
       oitem match {
         case Some(thing) =>
           addToInventory(thing)
           currentLoc ! Room.BroadcastInRoom(playerName, s"added ${thing.itemName} to their inventory")
-        case None => out.println(s"This item is not in the room")
+        case None => out.println(s"This item is not in the planet")
       }
     case GetCurrentRoom =>
       sender ! currentLoc
@@ -89,7 +89,7 @@ class Player(val playerName: String,
       case "tell" => val recieverAndMessage = subCommands(1).split(" ", 2)
         context.parent ! PlayerManager.PrivateMessage(self, recieverAndMessage(0), recieverAndMessage(1))
       case "exit" => context.parent ! PlayerManager.RemovePlayer(playerName)
-        currentLoc ! Room.RemovePlayer(self)
+        currentLoc ! Room.RemoveCharacter(self)
         context.stop(self)
       case _ =>
         out.println(s"$command is not a valid command. Please re-enter.")
@@ -102,7 +102,6 @@ class Player(val playerName: String,
     inventory.find(_.itemName.toLowerCase == itemName) match {
       case Some(item) =>
         inventory.remove(inventory.indexOf(item))
-        //          inventory.patch(inventory.indexOf(item), Nil, 1)
         Some(item)
       case None => None
     }
@@ -158,11 +157,11 @@ object Player {
 
   case class StartRoom(room: ActorRef)
 
+  case class MoveRoom(room: ActorRef)
+
   case object VerifyInput
 
   case object GetCurrentRoom
-
-  case class MoveRoom(room: ActorRef)
 
 }
 

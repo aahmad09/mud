@@ -11,7 +11,9 @@ class NPCManager extends Actor {
   def receive: Receive = {
     case CreateNPC(name, location) =>
       val newNPC = context.actorOf(Props(new NPC(name, location)), name)
+      newNPC ! NPC.Init
       npcMap += name -> newNPC
+      context.actorOf(Props(new NPC(name, location)))
     case m => println("Unhandled message in NPCManager " + m)
   }
 }
@@ -19,5 +21,7 @@ class NPCManager extends Actor {
 object NPCManager {
 
   case class CreateNPC(name: String, location: ActorRef)
+
+  case object MoveNPCs
 
 }

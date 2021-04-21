@@ -28,9 +28,9 @@ class RoomManager extends Actor {
     val exits = (node \ "exits").text.split(",")
     val items = (node \ "item").map(n => Item((n \ "@name").text, n.text)).toList
     val ret = key -> context.actorOf(Props(new Room(name, desc, exits, items)), key)
-    val npcs = (node \ "npc").map(n => new NPC((n \ "@name").text, ret._2)).toList
-    npcs.foreach { npc =>
-      Main.npcManager ! CreateNPC(npc.npcName, ret._2)
+    (node \ "npc").foreach { x =>
+      //      Main.system.actorOf(Props(new NPC((x \ "@name").text, ret._2)))
+      Main.npcManager ! CreateNPC((x \ "@name").text, ret._2)
     }
     ret
   }

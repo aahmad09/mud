@@ -2,12 +2,10 @@ package mud
 
 /**
  * shows player in full desc even after exit
- **/
+ * */
 
 import akka.actor.{ActorSystem, Props}
-import akka.dispatch.sysmsg.Create
 import mud.ActivityManager.CheckQueue
-import mud.NPCManager.CreateNPC
 
 import java.io.{BufferedReader, InputStreamReader, PrintStream}
 import java.net.ServerSocket
@@ -23,10 +21,10 @@ object Main extends App {
   val playerManager = system.actorOf(Props[PlayerManager], "PlayerManager")
   val roomManager = system.actorOf(Props[RoomManager], "RoomManager")
   val activityManager = system.actorOf(Props[ActivityManager], "ActivityManager")
-  val npcManager = system.actorOf(Props[ActivityManager], "NPCManager")
+  val npcManager = system.actorOf(Props[NPCManager], "NPCManager")
 
   system.scheduler.scheduleWithFixedDelay(0.seconds, 100.millis, playerManager, CheckInput)
-  system.scheduler.scheduleWithFixedDelay(0.seconds, 100.millis, activityManager, CheckQueue)
+  system.scheduler.scheduleWithFixedDelay(0.seconds, 1000.millis, activityManager, CheckQueue)
 
   val ss = new ServerSocket(8080)
   println(s"... Server is running using port ${ss.getLocalPort} ...")
