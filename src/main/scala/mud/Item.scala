@@ -1,6 +1,8 @@
 package mud
 
-case class Item(name: String, desc: String) {
-  var itemName: String = name
-  var itemDesc: String = desc
+case class Item(name: String, desc: String, damage: Int, delay: Int) {
+  val itemName: String = name
+  val itemDesc: String = desc
+  val itemDamage: Int = damage
+  val itemDelay: Int = delay
 }

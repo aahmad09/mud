@@ -24,7 +24,7 @@ object Main extends App {
   val npcManager = system.actorOf(Props[NPCManager], "NPCManager")
 
   system.scheduler.scheduleWithFixedDelay(0.seconds, 100.millis, playerManager, CheckInput)
-  system.scheduler.scheduleWithFixedDelay(0.seconds, 1000.millis, activityManager, CheckQueue)
+  system.scheduler.scheduleWithFixedDelay(0.seconds, 100.millis, activityManager, CheckQueue)
 
   val ss = new ServerSocket(8080)
   println(s"... Server is running using port ${ss.getLocalPort} ...")

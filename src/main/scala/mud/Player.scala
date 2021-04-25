@@ -11,10 +11,12 @@ class Player(val playerName: String,
 
   import Player._
 
-  //empty player inventory at start implemented as a mutable doubly linked list
   private val inventory: MutableDLList[Item] = new MutableDLList[Item]
-
+  private var hitPoints: Int = 50
+  private var equippedItem: Option[Item] = None
   private var currentLoc: ActorRef = null
+  private var move: Boolean = true
+  private var dead: Boolean = false
 
   def receive: Receive = {
     case VerifyInput =>
@@ -57,7 +59,32 @@ class Player(val playerName: String,
       }
     case GetCurrentRoom =>
       sender ! currentLoc
+    case GetTarget(tgt, weapon) =>
+      Main.activityManager ! ActivityManager.ScheduleActivity(Attack(tgt, weapon), self, weapon.delay)
+    case Attack(tgt, weapon) =>
+      tgt ! Player.GotHit(playerName, weapon, currentLoc)
+      move = false
+    case GotHit(attacker, weapon, loc) =>
+      out.println(s"$attacker attacked you with ${weapon.name} in ${loc.path.name}")
+      hitPoints -= weapon.damage
+      out.println(s"You took ${weapon.damage} damage. Health has now dropped to $hitPoints")
+      if (hitPoints <= 0) {
+        dead = true
+        out.println("Game over!")
+        sock.close()
+      } else {
+        out.println("Options are to attack back or flee")
+        move = false
+      }
+      sender ! Player.AttackOutcome(playerName, dead, hitPoints)
 
+    case AttackOutcome(tgt: String, dead: Boolean, hitPoints: Int) =>
+      if (dead) {
+        out.println("You killed " + tgt)
+        move = true
+      } else out.println(s"$tgt survived attack, and their health is at $hitPoints")
+    //    case GetStats =>
+    //      sender ! stats
     case m => out.println("Unhandled message in Player " + m)
   }
 
@@ -68,7 +95,7 @@ class Player(val playerName: String,
       case "exit" =>
         out.println(s"Goodbye $playerName!")
         sock.close()
-        context.stop(self)
+        stopGame()
       case "help" =>
         self ! Player.PrintMessage(printHelp())
       case "look" =>
@@ -81,6 +108,28 @@ class Player(val playerName: String,
           case Some(obtainedItem) => currentLoc ! Room.DropItem(obtainedItem)
             currentLoc ! Room.BroadcastInRoom(playerName, s"dropped the item ${obtainedItem.itemName}")
         }
+      case "equip" =>
+        getFromInventory(subCommands(1).toLowerCase()) match {
+          case None => out.println(s"The ${subCommands(1)} item is not in your inventory")
+          case Some(obtainedItem) => equippedItem = Option(obtainedItem)
+            out.println(s"Equipped ${subCommands(1)}")
+        }
+      case "unequip" =>
+        equippedItem match {
+          case None => out.println(s"You have not equipped any item")
+          case Some(getItem) => if (subCommands(1).toLowerCase() == getItem.itemName) equippedItem = None
+            out.println(s"Unequipped ${subCommands(1)}")
+        }
+      case "kill" =>
+        equippedItem match {
+          case None => out.println(s"You have not equipped any item")
+          case Some(getItem) => currentLoc ! Room.GetCharacter(subCommands(1).toLowerCase(), getItem)
+        }
+      case "flee" =>
+        val dir = util.Random.nextInt(6)
+        currentLoc ! Room.GetExit(dir)
+      case c if c == "hp" || c == "health" =>
+        out.println("Hitpoints: " + hitPoints)
       case c if c == "inventory" || c == "inv" =>
         out.println(inventoryListing())
       case c if "nsewup".contains(c.toLowerCase) || Set("north", "east", "south", "west", "up", "down").contains(c) =>
@@ -88,9 +137,6 @@ class Player(val playerName: String,
       case "say" => currentLoc ! Room.BroadcastInRoom(playerName, ": " + subCommands(1))
       case "tell" => val recieverAndMessage = subCommands(1).split(" ", 2)
         context.parent ! PlayerManager.PrivateMessage(self, recieverAndMessage(0), recieverAndMessage(1))
-      case "exit" => context.parent ! PlayerManager.RemovePlayer(playerName)
-        currentLoc ! Room.RemoveCharacter(self)
-        context.stop(self)
       case _ =>
         out.println(s"$command is not a valid command. Please re-enter.")
     }
@@ -138,9 +184,17 @@ drop 'item' -  drop an item from your spaceship's inventory into the void or the
 exit - leave the game
 help - print a list of commands and their description."""
 
+  def stats: String = "_" * 40 + s"Player: $playerName\nHit points: $hitPoints" + "_" * 40
+
   //Add the given item to inventory
   def addToInventory(item: Item): Unit = {
     inventory += item
+  }
+
+  def stopGame(): Unit = {
+    context.parent ! PlayerManager.RemovePlayer(playerName)
+    currentLoc ! Room.RemoveCharacter(self)
+    context.stop(self)
   }
 
 }
@@ -148,6 +202,14 @@ help - print a list of commands and their description."""
 object Player {
 
   case class PrintMessage(msg: String)
+
+  case class GetTarget(tgt: ActorRef, weapon: Item)
+
+  case class Attack(tgt: ActorRef, weapon: Item)
+
+  case class GotHit(attacker: String, weapon: Item, loc: ActorRef)
+
+  case class AttackOutcome(target: String, dead: Boolean, hitPoints: Int)
 
   case class TakeExit(oroom: Option[ActorRef])
 
@@ -159,9 +221,13 @@ object Player {
 
   case class MoveRoom(room: ActorRef)
 
+  case object GetStats
+
   case object VerifyInput
 
   case object GetCurrentRoom
 
 }
+
+
 

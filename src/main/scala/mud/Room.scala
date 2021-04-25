@@ -20,10 +20,11 @@ class Room(val name: String,
       exits = exitKeys.map(key => rooms.get(key))
     case FullDescription =>
       sender ! Player.PrintMessage(fullDescription())
+    //    case GetEntityStats =>
+    //      characters.foreach(_ ! Player.GetStats)
+    //    case SendStats =>
     case GetExit(dir) =>
       sender ! Player.TakeExit(getExit(dir))
-    case GetNPCExit(dir) =>
-      sender ! NPC.TakeExit(getExit(dir))
     case GetItem(itemName) =>
       sender ! Player.PickItem(getItem(itemName))
     case DropItem(item) =>
@@ -32,8 +33,12 @@ class Room(val name: String,
       characters += user
     case RemoveCharacter(user: ActorRef) => //TODO: remove player from room when they disconnect
       characters -= user
-    case BroadcastInRoom(playerName: String, msg: String) =>
-      characters.foreach(_ ! Player.PrintMessage(s"*** $playerName $msg ***"))
+    case GetCharacter(charName, weapon) =>
+      println(charName + weapon) //TODO: remove
+      characters.foreach(x => if (x.path.name == charName) sender ! Player.GetTarget(x, weapon))
+
+    case BroadcastInRoom(playerName, msg) =>
+      characters.foreach(_ ! Player.PrintMessage(s"$playerName $msg"))
     case m => println("Unhandled message in Room " + m)
   }
 
@@ -51,8 +56,8 @@ class Room(val name: String,
   }
 
   //Print the complete description of the room.
-  def fullDescription(): String = s"$name\n$desc\nExits: ${formatExits()}Items: ${formatItem(items)} " +
-    s"\nCharacters in this room: ${formatCharacters(characters)}"
+  def fullDescription(): String = "*" * 40 + s"\n$name\n$desc\nExits: ${formatExits()}Items: ${formatItem(items)} " +
+    s"\nCharacters in this room: ${formatCharacters(characters)}\n" + "*" * 40
 
   def formatCharacters(unformattedList: ArrayBuffer[ActorRef]): String = {
     var ret = ""
@@ -87,6 +92,14 @@ class Room(val name: String,
   //Add an item to this room
   def dropItem(item: Item): Unit = items = item :: items
 
+  def CharacterDescriptions(): String = {
+    var ret = ""
+    characters.foreach {
+      ret += _ ! Player.GetStats
+    }
+    ret
+  }
+
 }
 
 object Room {
@@ -94,8 +107,6 @@ object Room {
   case class LinkExits(rooms: Map[String, ActorRef])
 
   case class GetExit(dir: Int)
-
-  case class GetNPCExit(dir: Int)
 
   case class GetItem(itemName: String)
 
@@ -105,9 +116,13 @@ object Room {
 
   case class RemoveCharacter(user: ActorRef)
 
+  case class GetCharacter(charName:String, weapon: Item)
+
   case class BroadcastInRoom(playerName: String, msg: String)
 
   case object FullDescription
+
+  case object GetEntityStats
 
 }
 
