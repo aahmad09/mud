@@ -14,15 +14,15 @@ class NPC(val npcName: String, npcDesc: String, private var currentLoc: ActorRef
 
   def receive: Receive = {
     case Init =>
-      currentLoc ! Room.AddCharacter(self)
+      currentLoc ! Room.AddCharacter(npcName, self)
       Main.activityManager ! ActivityManager.ScheduleActivity(RndMove(util.Random.nextInt(6)), self, moveDelay)
     case Player.TakeExit(oroom) =>
       oroom match {
         case Some(pos) =>
-          currentLoc ! Room.RemoveCharacter(self)
+          currentLoc ! Room.RemoveCharacter(npcName, self)
           currentLoc ! Room.BroadcastInRoom(npcName, "departed from this planet")
           currentLoc = pos
-          currentLoc ! Room.AddCharacter(self)
+          currentLoc ! Room.AddCharacter(npcName, self)
           currentLoc ! Room.BroadcastInRoom(npcName, "arrived at this planet")
           Main.activityManager ! ActivityManager.ScheduleActivity(RndMove(util.Random.nextInt(6)), self, moveDelay)
         case None =>
@@ -39,12 +39,12 @@ class NPC(val npcName: String, npcDesc: String, private var currentLoc: ActorRef
         sender ! Player.AttackOutcome(npcName, dead, hitPoints)
       } else {
         sender ! Player.AttackOutcome(npcName, dead, hitPoints)
-        loc ! Room.GetCharacter(attacker, None.asInstanceOf[Item])
+        loc ! Room.FindCharacter(attacker, None.asInstanceOf[Item])
       }
       println(npcName + " " + hitPoints) //TODO: remove
-    sender ! Player.AttackOutcome(npcName, dead, hitPoints)
+      sender ! Player.AttackOutcome(npcName, dead, hitPoints)
     case Player.AttackOutcome(name, dead, hitPoints) =>
-      if (!dead) currentLoc ! Room.GetCharacter(name, None.asInstanceOf[Item])
+      if (!dead) currentLoc ! Room.FindCharacter(name, None.asInstanceOf[Item])
     case Player.PrintMessage(_) =>
       None
     case m => println("Unhandled message in NPC " + m)

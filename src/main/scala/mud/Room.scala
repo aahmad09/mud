@@ -2,7 +2,7 @@ package mud
 
 import akka.actor.{Actor, ActorRef}
 
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable
 
 class Room(val name: String,
            val desc: String,
@@ -10,7 +10,7 @@ class Room(val name: String,
            private var items: List[Item])
   extends Actor {
 
-  private val characters: ArrayBuffer[ActorRef] = ArrayBuffer()
+  private var charactersMap: mutable.Map[String, ActorRef] = mutable.Map()
   private var exits: Array[Option[ActorRef]] = null
 
   import Room._
@@ -29,16 +29,16 @@ class Room(val name: String,
       sender ! Player.PickItem(getItem(itemName))
     case DropItem(item) =>
       dropItem(item)
-    case AddCharacter(user: ActorRef) =>
-      characters += user
-    case RemoveCharacter(user: ActorRef) => //TODO: remove player from room when they disconnect
-      characters -= user
-    case GetCharacter(charName, weapon) =>
-      println(charName + weapon) //TODO: remove
-      characters.foreach(x => if (x.path.name == charName) sender ! Player.GetTarget(x, weapon))
-
+    case AddCharacter(charName, user) =>
+      charactersMap = charactersMap + (charName -> user)
+    case RemoveCharacter(charName, _) => //TODO: remove player from room when they disconnect
+      charactersMap = charactersMap - charName
+    case FindCharacter(charName, weapon) =>
+      if (charactersMap.contains(charName)) sender ! Player.GetTarget(charactersMap(charName), weapon)
+      else sender ! Player.PrintMessage("This Character is not in the room")
     case BroadcastInRoom(playerName, msg) =>
-      characters.foreach(_ ! Player.PrintMessage(s"$playerName $msg"))
+      charactersMap.foreach(_._2 ! Player.PrintMessage(s"$playerName $msg"))
+    case GetAllStats=> ???
     case m => println("Unhandled message in Room " + m)
   }
 
@@ -57,11 +57,11 @@ class Room(val name: String,
 
   //Print the complete description of the room.
   def fullDescription(): String = "*" * 40 + s"\n$name\n$desc\nExits: ${formatExits()}Items: ${formatItem(items)} " +
-    s"\nCharacters in this room: ${formatCharacters(characters)}\n" + "*" * 40
+    s"\nCharacters in this room: $formatCharacters\n" + "*" * 40
 
-  def formatCharacters(unformattedList: ArrayBuffer[ActorRef]): String = {
+  def formatCharacters: String = {
     var ret = ""
-    for (characterName <- unformattedList) ret += characterName.path.name + ", "
+    for ((characterName,_) <- charactersMap) ret += characterName + ", "
     if (ret == "") ret = "None  "
     ret.dropRight(2)
   }
@@ -92,13 +92,11 @@ class Room(val name: String,
   //Add an item to this room
   def dropItem(item: Item): Unit = items = item :: items
 
-  def CharacterDescriptions(): String = {
-    var ret = ""
-    characters.foreach {
-      ret += _ ! Player.GetStats
-    }
-    ret
-  }
+//  def CharacterDescriptions(): String = {
+//    var ret = ""
+//    charactersMap.foreach(ret += _._2 ! Player.GetStats)
+//    ret
+//  }
 
 }
 
@@ -112,11 +110,13 @@ object Room {
 
   case class DropItem(item: Item)
 
-  case class AddCharacter(user: ActorRef)
+  case class AddCharacter(charName: String, user: ActorRef)
 
-  case class RemoveCharacter(user: ActorRef)
+  case class RemoveCharacter(charName: String, user: ActorRef)
 
-  case class GetCharacter(charName:String, weapon: Item)
+  case class FindCharacter(charName:String, weapon: Item)
+
+  case class GetAllStats(stat: String)
 
   case class BroadcastInRoom(playerName: String, msg: String)
 

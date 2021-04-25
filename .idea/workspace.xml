@@ -4,16 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Implemented PQ and NPC assignment">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/mud/Characters.scala" afterDir="false" />
+    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Working on Combat system">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/map.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Character.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Item.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Item.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" afterDir="false" />
@@ -190,6 +184,8 @@
       <workItem from="1619113926070" duration="719000" />
       <workItem from="1619118171954" duration="217000" />
       <workItem from="1619294181533" duration="14415000" />
+      <workItem from="1619379719853" duration="240000" />
+      <workItem from="1619387828251" duration="5320000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -254,7 +250,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619041304287</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Working on Combat system">
+      <created>1619379886449</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1619379886449</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -283,6 +286,7 @@
     <MESSAGE value="Stubs for PQ and NPC" />
     <MESSAGE value="Working on PQ and NPC" />
     <MESSAGE value="Implemented PQ and NPC assignment" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented PQ and NPC assignment" />
+    <MESSAGE value="Working on Combat system" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working on Combat system" />
   </component>
 </project>

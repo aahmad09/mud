@@ -34,17 +34,17 @@ class Player(val playerName: String,
       Thread.sleep(2000)
     case StartRoom(room: ActorRef) =>
       currentLoc = room
-      currentLoc ! Room.AddCharacter(self)
+      currentLoc ! Room.AddCharacter(playerName, self)
       currentLoc ! Room.FullDescription
     case PrintMessage(msg) =>
       out.println(msg)
     case TakeExit(oroom) =>
       oroom match {
         case Some(pos) =>
-          currentLoc ! Room.RemoveCharacter(self)
+          currentLoc ! Room.RemoveCharacter(playerName, self)
           currentLoc ! Room.BroadcastInRoom(playerName, "departed from this planet")
           currentLoc = pos
-          currentLoc ! Room.AddCharacter(self)
+          currentLoc ! Room.AddCharacter(playerName, self)
           currentLoc ! Room.FullDescription
           currentLoc ! Room.BroadcastInRoom(playerName, "arrived at this planet")
         case None =>
@@ -61,22 +61,28 @@ class Player(val playerName: String,
       sender ! currentLoc
     case GetTarget(tgt, weapon) =>
       Main.activityManager ! ActivityManager.ScheduleActivity(Attack(tgt, weapon), self, weapon.delay)
+      tgt ! Player.InitiateAttack(playerName, weapon)
     case Attack(tgt, weapon) =>
       tgt ! Player.GotHit(playerName, weapon, currentLoc)
       move = false
+    case InitiateAttack(charName, weapon) =>
+      out.println(s"$charName has initiated an attack on you with their weapon ${weapon.itemName}, which has" +
+        s"damage ${weapon.damage}\nOptions are to attack back or flee")
+      move = false
     case GotHit(attacker, weapon, loc) =>
-      out.println(s"$attacker attacked you with ${weapon.name} in ${loc.path.name}")
-      hitPoints -= weapon.damage
-      out.println(s"You took ${weapon.damage} damage. Health has now dropped to $hitPoints")
-      if (hitPoints <= 0) {
-        dead = true
-        out.println("Game over!")
-        sock.close()
+      if (loc == currentLoc) {
+        out.println(s"$attacker attacked you with ${weapon.name} in ${loc.path.name}")
+        hitPoints -= weapon.damage
+        out.println(s"You took ${weapon.damage} damage. Health has now dropped to $hitPoints")
+        if (hitPoints <= 0) {
+          dead = true
+          out.println("Game over!")
+          sock.close()
+        }
+        sender ! Player.AttackOutcome(playerName, dead, hitPoints)
       } else {
-        out.println("Options are to attack back or flee")
-        move = false
+        out.println(s"$playerName tried to attack you, but you fled just in time.")
       }
-      sender ! Player.AttackOutcome(playerName, dead, hitPoints)
 
     case AttackOutcome(tgt: String, dead: Boolean, hitPoints: Int) =>
       if (dead) {
@@ -114,19 +120,24 @@ class Player(val playerName: String,
           case Some(obtainedItem) => equippedItem = Option(obtainedItem)
             out.println(s"Equipped ${subCommands(1)}")
         }
-      case "unequip" =>
-        equippedItem match {
-          case None => out.println(s"You have not equipped any item")
-          case Some(getItem) => if (subCommands(1).toLowerCase() == getItem.itemName) equippedItem = None
-            out.println(s"Unequipped ${subCommands(1)}")
+      case "unequip" => //make better
+        try {
+          equippedItem match {
+            case None => out.println(s"You have not equipped any item")
+            case Some(getItem) => if (subCommands(1).toLowerCase() == getItem.itemName) equippedItem = None
+              out.println(s"Unequipped ${subCommands(1)}")
+          }
+        } catch {
+          case e: ArrayIndexOutOfBoundsException => out.println("Please specify which item to unequip")
         }
       case "kill" =>
         equippedItem match {
           case None => out.println(s"You have not equipped any item")
-          case Some(getItem) => currentLoc ! Room.GetCharacter(subCommands(1).toLowerCase(), getItem)
+          case Some(getItem) => currentLoc ! Room.FindCharacter(subCommands(1).split(" ")(0).toLowerCase(), getItem)
         }
       case "flee" =>
-        val dir = util.Random.nextInt(6)
+//        val dir = util.Random.nextInt(6)
+        val dir = 2
         currentLoc ! Room.GetExit(dir)
       case c if c == "hp" || c == "health" =>
         out.println("Hitpoints: " + hitPoints)
@@ -193,7 +204,7 @@ help - print a list of commands and their description."""
 
   def stopGame(): Unit = {
     context.parent ! PlayerManager.RemovePlayer(playerName)
-    currentLoc ! Room.RemoveCharacter(self)
+    currentLoc ! Room.RemoveCharacter(playerName, self)
     context.stop(self)
   }
 
@@ -220,6 +231,8 @@ object Player {
   case class StartRoom(room: ActorRef)
 
   case class MoveRoom(room: ActorRef)
+
+  case class InitiateAttack(charName: String, weapon: Item)
 
   case object GetStats
 
