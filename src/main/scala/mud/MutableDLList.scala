@@ -95,14 +95,6 @@ class MutableDLList[A] extends mutable.Buffer[A] {
     ret
   }
 
-  def +=(elem: A): MutableDLList.this.type = {
-    val newNode = new Node(elem, end.prev, end)
-    end.prev.next = newNode
-    end.prev = newNode
-    numElems += 1
-    this
-  }
-
   def myMap[B](f: A => B): MutableDLList[B] = {
     val ret = new MutableDLList[B]()
     var rover = end.next
@@ -111,6 +103,14 @@ class MutableDLList[A] extends mutable.Buffer[A] {
       rover = rover.next
     }
     ret
+  }
+
+  def +=(elem: A): MutableDLList.this.type = {
+    val newNode = new Node(elem, end.prev, end)
+    end.prev.next = newNode
+    end.prev = newNode
+    numElems += 1
+    this
   }
 
   override def toString: String = mkString("MutableDLList(", ", ", ")")

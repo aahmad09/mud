@@ -14,15 +14,18 @@
             you've never seen before. Tall, lush, orange trees surround you.
         </description>
         <exits>none,none,hoth_,none,none,none</exits>
-        <item name="Sword" desc="A huge and long two-handed sword." dmg="5" delay="10">
+        <item name="Sword" desc="A huge and long two-handed sword." dmg="20" delay="30">
         </item>
         <item name="Beaburg" desc="A red shaped banana. It seems poisonous." dmg="3" delay="100">
         </item>
         <item name="Boots" desc="They look like they are made of some animal's skin... indications of intelligent life?"
-              dmg="0" delay="1">
+              dmg="0" delay="10">
         </item>
-        <npc name="Skeani">A halfling Paladin, Skeani has red hair and light amber eyes, and a flat nose. She wears
-            banded mail and wields a spear and shield.
+        <npc name="Skeani"
+             desc="A halfling Paladin, Skeani has red hair and light amber eyes, and a flat nose. She wears banded mail and wields a spear and shield."
+             itemName="Spear"
+             itemDesc="The long, dual-edged spear makes this weapon the best choice for both cleaving and stabbing enemies with ferocious power."
+             itemDmg="30" itemDelay="80">
         </npc>
     </room>
 
@@ -31,10 +34,12 @@
             Deserts stretch out till the horizon, strangely beautiful, yet eerily frightening.
         </description>
         <exits>-1,-1,-1,kudenerth_,-1,zennla_</exits>
-        <item name="Minerals" desc="Shiny gold-like sharp objects." dmg="2" delay="1">
+        <item name="Minerals" desc="Shiny gold-like sharp objects." dmg="2" delay="10">
         </item>
-        <npc name="Alecchni">Alecchni has six spider-like legs and eight black eyes. It dislikes anyone bigger than
-            itself.
+        <npc name="Alecchni"
+             desc="Alecchni has six spider-like legs and eight black eyes. She dislikes anyone bigger than itself."
+             itemName="Venom" itemDesc="Purplish liquid that smells foul. It seems highly poisonous" itemDmg="50"
+             itemDelay="200">
         </npc>
     </room>
 
@@ -47,7 +52,7 @@
         </description>
         <exits>-1,-1,-1,-1,hoth_,-1</exits>
         <item name="Crystal clear liquid" desc="Is it suitable for drinking? You would have to test it." dmg="0"
-              delay="1">
+              delay="10">
         </item>
     </room>
 

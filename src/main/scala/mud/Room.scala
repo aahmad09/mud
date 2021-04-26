@@ -20,9 +20,6 @@ class Room(val name: String,
       exits = exitKeys.map(key => rooms.get(key))
     case FullDescription =>
       sender ! Player.PrintMessage(fullDescription())
-    //    case GetEntityStats =>
-    //      characters.foreach(_ ! Player.GetStats)
-    //    case SendStats =>
     case GetExit(dir) =>
       sender ! Player.TakeExit(getExit(dir))
     case GetItem(itemName) =>
@@ -30,15 +27,17 @@ class Room(val name: String,
     case DropItem(item) =>
       dropItem(item)
     case AddCharacter(charName, user) =>
-      charactersMap = charactersMap + (charName -> user)
+      charactersMap = charactersMap + (charName.toLowerCase -> user)
     case RemoveCharacter(charName, _) => //TODO: remove player from room when they disconnect
-      charactersMap = charactersMap - charName
+      charactersMap = charactersMap - charName.toLowerCase
     case FindCharacter(charName, weapon) =>
-      if (charactersMap.contains(charName)) sender ! Player.GetTarget(charactersMap(charName), weapon)
-      else sender ! Player.PrintMessage("This Character is not in the room")
+      sender ! Player.InitiateAttack(charactersMap.get(charName.toLowerCase), weapon)
+    case GetCharStats(entityName, requester) =>
+      charactersMap.get(entityName) match {
+        case Some(found) => found ! Player.ReturnStats(requester)
+      }
     case BroadcastInRoom(playerName, msg) =>
       charactersMap.foreach(_._2 ! Player.PrintMessage(s"$playerName $msg"))
-    case GetAllStats=> ???
     case m => println("Unhandled message in Room " + m)
   }
 
@@ -61,7 +60,7 @@ class Room(val name: String,
 
   def formatCharacters: String = {
     var ret = ""
-    for ((characterName,_) <- charactersMap) ret += characterName + ", "
+    for ((characterName, _) <- charactersMap) ret += characterName + ", "
     if (ret == "") ret = "None  "
     ret.dropRight(2)
   }
@@ -92,11 +91,11 @@ class Room(val name: String,
   //Add an item to this room
   def dropItem(item: Item): Unit = items = item :: items
 
-//  def CharacterDescriptions(): String = {
-//    var ret = ""
-//    charactersMap.foreach(ret += _._2 ! Player.GetStats)
-//    ret
-//  }
+  //  def CharacterDescriptions(): String = {
+  //    var ret = ""
+  //    charactersMap.foreach(ret += _._2 ! Player.GetStats)
+  //    ret
+  //  }
 
 }
 
@@ -114,15 +113,13 @@ object Room {
 
   case class RemoveCharacter(charName: String, user: ActorRef)
 
-  case class FindCharacter(charName:String, weapon: Item)
+  case class FindCharacter(charName: String, weapon: Item)
 
-  case class GetAllStats(stat: String)
+  case class GetCharStats(entityName: String, sender: ActorRef)
 
   case class BroadcastInRoom(playerName: String, msg: String)
 
   case object FullDescription
-
-  case object GetEntityStats
 
 }
 

@@ -1,16 +1,17 @@
 package mud
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, PoisonPill}
 
-class NPC(val npcName: String, npcDesc: String, private var currentLoc: ActorRef) extends Actor {
+class NPC(val npcName: String, npcDesc: String, val weapon: Item, private var currentLoc: ActorRef) extends Actor {
 
   import NPC._
 
   //try to move randomly every 10 seconds
   val moveDelay = 100
 
-  private var hitPoints: Int = 10
+  private var hitPoints: Int = 80
   private var dead = false
+  private var canMove: Boolean = true
 
   def receive: Receive = {
     case Init =>
@@ -31,26 +32,33 @@ class NPC(val npcName: String, npcDesc: String, private var currentLoc: ActorRef
     //    case Player.GetStats =>
     //      sender ! Room.SendStats
     case RndMove(dir: Int) =>
-      currentLoc ! Room.GetExit(dir)
-    case Player.GotHit(attacker: String, weapon: Item, loc: ActorRef) =>
-      hitPoints -= weapon.damage
-      if (hitPoints <= 0) {
-        dead = true
-        sender ! Player.AttackOutcome(npcName, dead, hitPoints)
-      } else {
-        sender ! Player.AttackOutcome(npcName, dead, hitPoints)
-        loc ! Room.FindCharacter(attacker, None.asInstanceOf[Item])
+      if (!dead) currentLoc ! Room.GetExit(dir)
+    case Player.GotHit(attackerRef, weapon, loc) =>
+      if (loc == currentLoc) {
+        if (util.Random.nextInt(6) < 6) {
+          Main.activityManager ! ActivityManager
+            .ScheduleActivity(Player.GotHit(self, weapon, currentLoc), attackerRef, weapon.delay)
+          attackerRef ! Player.GetAttacked(npcName, weapon)
+        }
+        hitPoints -= weapon.damage
+        if (hitPoints <= 0) {
+          dead = true
+          context.parent ! NPCManager.RemoveNPC(npcName)
+          currentLoc ! Room.RemoveCharacter(npcName, self)
+          self ! PoisonPill
+        }
+        attackerRef ! Player.AttackOutcome(npcName, dead, hitPoints)
       }
-      println(npcName + " " + hitPoints) //TODO: remove
-      sender ! Player.AttackOutcome(npcName, dead, hitPoints)
-    case Player.AttackOutcome(name, dead, hitPoints) =>
-      if (!dead) currentLoc ! Room.FindCharacter(name, None.asInstanceOf[Item])
+    case Player.GetAttacked(_, _) =>
+      canMove = false
+    case Player.AttackOutcome(_, _, _) =>
+      canMove = true
     case Player.PrintMessage(_) =>
       None
+    case Player.ReturnStats(requester) =>
+      requester ! Player.PrintMessage(s"NPC: $npcName\nDescription: $npcDesc\nWeapon: ${weapon.itemName} - ${weapon.itemDesc}\nHit points: $hitPoints")
     case m => println("Unhandled message in NPC " + m)
   }
-
-  def stats: String = "_" * 40 + s"NPC: $npcName\nDescription: $npcDesc\nHit points: $hitPoints" + "_" * 40
 
 }
 

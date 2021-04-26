@@ -1,9 +1,5 @@
 package mud
 
-/**
- * shows player in full desc even after exit
- * */
-
 import akka.actor.{ActorSystem, Props}
 import mud.ActivityManager.CheckQueue
 
