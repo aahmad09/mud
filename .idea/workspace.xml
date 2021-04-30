@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Implemented Combat">
+    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Fixed few bugs in Combat">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Item.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Item.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +202,8 @@
       <workItem from="1619535823377" duration="1612000" />
       <workItem from="1619655055318" duration="5707000" />
       <workItem from="1619806274469" duration="178000" />
-      <workItem from="1619806642416" duration="3354000" />
+      <workItem from="1619806642416" duration="3667000" />
+      <workItem from="1619817533633" duration="622000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -291,7 +289,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619480491971</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Fixed few bugs in Combat">
+      <created>1619810299122</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1619810299122</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -323,6 +328,7 @@
     <MESSAGE value="Working on Combat system" />
     <MESSAGE value="Implemented kill command" />
     <MESSAGE value="Implemented Combat" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented Combat" />
+    <MESSAGE value="Fixed few bugs in Combat" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed few bugs in Combat" />
   </component>
 </project>

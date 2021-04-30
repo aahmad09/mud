@@ -80,14 +80,14 @@ class Player(val playerName: String,
           self ! PoisonPill
           sock.close()
         }
-        attackerRef ! Player.AttackOutcome(playerName, dead, hitPoints)
+        attackerRef ! Player.AttackOutcome(self, dead, hitPoints, weapon)
       } else out.println(s"${attackerRef.path.name} tried to attack you, but you fled just in time.")
-    case AttackOutcome(tgt: String, dead: Boolean, hitPoints: Int) =>
-      if (dead) out.println("You killed " + tgt)
+    case AttackOutcome(tgt, dead, hitPoints, weapon) =>
+      if (dead) out.println("You killed " + tgt.path.name)
       else {
-//        Main.activityManager ! ActivityManager
-//          .ScheduleActivity(GotHit(self, equippedItem, currentLoc), tgtFound, weapon.delay)
-        out.println(s"$tgt survived attack, and their health is at $hitPoints")
+        Main.activityManager ! ActivityManager
+          .ScheduleActivity(GotHit(self, weapon, currentLoc), tgt, weapon.delay)
+        out.println(s"${tgt.path.name} survived attack, and their health is at $hitPoints")
       }
       canMove = true
     case ReturnStats(requester) =>
@@ -232,7 +232,7 @@ object Player {
 
   case class GotHit(attackerRef: ActorRef, weapon: Item, loc: ActorRef)
 
-  case class AttackOutcome(target: String, dead: Boolean, hitPoints: Int)
+  case class AttackOutcome(target: ActorRef, dead: Boolean, hitPoints: Int, weapon: Item)
 
   case class TakeExit(oroom: Option[ActorRef])
 
