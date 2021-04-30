@@ -68,7 +68,7 @@ class Room(val name: String,
   //Format item names and desc for printing
   def formatItem(unformattedItems: List[Item]): String = {
     var ret: String = ""
-    for (elem <- unformattedItems) ret += elem.itemName + ", "
+    for (elem <- unformattedItems) ret += elem.name + ", "
     if (ret == "") ret = "None  "
     ret.dropRight(2)
   }

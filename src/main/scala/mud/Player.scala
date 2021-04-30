@@ -1,6 +1,6 @@
 package mud
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorRef, PoisonPill}
 
 import java.io.{BufferedReader, PrintStream}
 import java.net.Socket
@@ -48,13 +48,13 @@ class Player(val playerName: String,
           currentLoc ! Room.FullDescription
           currentLoc ! Room.BroadcastInRoom(playerName, "arrived at this planet")
         case None =>
-          out.println("Region does not exist")
+          out.println("Cannot go that way")
       }
     case PickItem(oitem) =>
       oitem match {
         case Some(thing) =>
           addToInventory(thing)
-          currentLoc ! Room.BroadcastInRoom(playerName, s"added ${thing.itemName} to their inventory")
+          currentLoc ! Room.BroadcastInRoom(playerName, s"added ${thing.name} to their inventory")
         case None => out.println(s"This item is not in the planet")
       }
     case InitiateAttack(tgt, weapon) =>
@@ -66,7 +66,7 @@ class Player(val playerName: String,
         case None => out.println("That character is not in the room")
       }
     case GetAttacked(charName, weapon) =>
-      out.println(s"$charName has initiated an attack on you with their weapon ${weapon.itemName}, which has " +
+      out.println(s"$charName has initiated an attack on you with their weapon ${weapon.name}, which has " +
         s"damage ${weapon.damage}\nYou have ${weapon.delay / 10} seconds to flee")
       canMove = false
     case GotHit(attackerRef, weapon, loc) =>
@@ -77,13 +77,18 @@ class Player(val playerName: String,
         if (hitPoints <= 0) {
           dead = true
           out.println("Game over!")
+          self ! PoisonPill
           sock.close()
         }
         attackerRef ! Player.AttackOutcome(playerName, dead, hitPoints)
       } else out.println(s"${attackerRef.path.name} tried to attack you, but you fled just in time.")
     case AttackOutcome(tgt: String, dead: Boolean, hitPoints: Int) =>
       if (dead) out.println("You killed " + tgt)
-      else out.println(s"$tgt survived attack, and their health is at $hitPoints")
+      else {
+//        Main.activityManager ! ActivityManager
+//          .ScheduleActivity(GotHit(self, equippedItem, currentLoc), tgtFound, weapon.delay)
+        out.println(s"$tgt survived attack, and their health is at $hitPoints")
+      }
       canMove = true
     case ReturnStats(requester) =>
       requester ! Player.PrintMessage(s"Health: $hitPoints\n${inventoryListing()}")
@@ -110,7 +115,7 @@ class Player(val playerName: String,
           case Some(obtainedItem) => currentLoc ! Room.DropItem(obtainedItem)
             inventory.remove(inventory.indexOf(obtainedItem))
             if (obtainedItem == equippedItem.get) equippedItem = None
-            currentLoc ! Room.BroadcastInRoom(playerName, s"dropped the item ${obtainedItem.itemName}")
+            currentLoc ! Room.BroadcastInRoom(playerName, s"dropped the item ${obtainedItem.name}")
         }
       case "equip" =>
         getFromInventory(subCommands(1).toLowerCase()) match {
@@ -122,7 +127,7 @@ class Player(val playerName: String,
         try {
           equippedItem match {
             case None => out.println(s"You have not equipped any item")
-            case Some(getItem) => if (subCommands(1).toLowerCase() == getItem.itemName) equippedItem = None
+            case Some(getItem) => if (subCommands(1).toLowerCase() == getItem.name) equippedItem = None
               out.println(s"Unequipped ${subCommands(1)}")
           }
         } catch {
@@ -157,7 +162,7 @@ class Player(val playerName: String,
 
   //Pull an item out of the inventory if it exists and return it
   def getFromInventory(itemName: String): Option[Item] = {
-    inventory.find(_.itemName.toLowerCase == itemName) match {
+    inventory.find(_.name.toLowerCase == itemName) match {
       case Some(item) => Some(item)
       case None => None
     }
@@ -201,7 +206,7 @@ help - print a list of commands and their description."""
   //Build a String with the contents of the inventory
   def inventoryListing(): String = {
     var invStr: String = "Inventory:\n"
-    for (elem <- inventory) if (elem != equippedItem.get) invStr += s"\t${elem.itemName} - ${elem.itemDesc}\n"
+    for (elem <- inventory) if (elem != equippedItem.get) invStr += s"\t${elem.name} - ${elem.desc}\n"
     if (invStr == "Inventory:\n") invStr = "Inventory: Empty "
     invStr = invStr.dropRight(1)
     //do a foreach on a list if multiple items can be equipped
@@ -246,6 +251,5 @@ object Player {
   case object VerifyInput
 
 }
-
 
 

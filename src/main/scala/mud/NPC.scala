@@ -2,7 +2,7 @@ package mud
 
 import akka.actor.{Actor, ActorRef, PoisonPill}
 
-class NPC(val npcName: String, npcDesc: String, val weapon: Item, private var currentLoc: ActorRef) extends Actor {
+class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var currentLoc: ActorRef) extends Actor {
 
   import NPC._
 
@@ -12,6 +12,7 @@ class NPC(val npcName: String, npcDesc: String, val weapon: Item, private var cu
   private var hitPoints: Int = 80
   private var dead = false
   private var canMove: Boolean = true
+  private var victimCombat: Option[ActorRef] = None
 
   def receive: Receive = {
     case Init =>
@@ -37,8 +38,8 @@ class NPC(val npcName: String, npcDesc: String, val weapon: Item, private var cu
       if (loc == currentLoc) {
         if (util.Random.nextInt(6) < 6) {
           Main.activityManager ! ActivityManager
-            .ScheduleActivity(Player.GotHit(self, weapon, currentLoc), attackerRef, weapon.delay)
-          attackerRef ! Player.GetAttacked(npcName, weapon)
+            .ScheduleActivity(Player.GotHit(self, npcWeapon, currentLoc), attackerRef, npcWeapon.delay)
+          attackerRef ! Player.GetAttacked(npcName, npcWeapon)
         }
         hitPoints -= weapon.damage
         if (hitPoints <= 0) {
@@ -56,7 +57,7 @@ class NPC(val npcName: String, npcDesc: String, val weapon: Item, private var cu
     case Player.PrintMessage(_) =>
       None
     case Player.ReturnStats(requester) =>
-      requester ! Player.PrintMessage(s"NPC: $npcName\nDescription: $npcDesc\nWeapon: ${weapon.itemName} - ${weapon.itemDesc}\nHit points: $hitPoints")
+      requester ! Player.PrintMessage(s"NPC: $npcName\nDescription: $npcDesc\nWeapon: ${npcWeapon.name} - ${npcWeapon.desc}\nHit points: $hitPoints")
     case m => println("Unhandled message in NPC " + m)
   }
 

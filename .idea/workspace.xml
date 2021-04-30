@@ -4,16 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Implemented kill command">
+    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Implemented Combat">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/map.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Item.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Item.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Main.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,15 +38,15 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/main/scala/mud/NPC.scala" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/Main.scala" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/Player.scala" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/Room.scala" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/resources/map.xml" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/Main.scala" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/Player.scala" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/PlayerManager.scala" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main/scala/mud/Room.scala" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
@@ -90,8 +88,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="idk" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="mud.idk" />
+    <configuration name="id" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="mud.id" />
       <module name="MUD" />
       <extension name="coverage">
         <pattern>
@@ -103,13 +101,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
+    <configuration name="idk" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="mud.idk" />
+      <module name="MUD" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="mud.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -131,6 +131,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.id" />
         <item itemvalue="Application.idk" />
         <item itemvalue="Scala REPL.Scala REPL" />
       </list>
@@ -200,7 +201,11 @@
       <workItem from="1619294181533" duration="14415000" />
       <workItem from="1619379719853" duration="240000" />
       <workItem from="1619387828251" duration="7513000" />
-      <workItem from="1619462610405" duration="16940000" />
+      <workItem from="1619462610405" duration="17232000" />
+      <workItem from="1619535823377" duration="1612000" />
+      <workItem from="1619655055318" duration="5707000" />
+      <workItem from="1619806274469" duration="178000" />
+      <workItem from="1619806642416" duration="3354000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -279,7 +284,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619393419604</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Implemented Combat">
+      <created>1619480491971</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1619480491971</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -310,6 +322,7 @@
     <MESSAGE value="Implemented PQ and NPC assignment" />
     <MESSAGE value="Working on Combat system" />
     <MESSAGE value="Implemented kill command" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented kill command" />
+    <MESSAGE value="Implemented Combat" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented Combat" />
   </component>
 </project>
