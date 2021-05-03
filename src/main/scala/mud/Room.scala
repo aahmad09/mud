@@ -101,7 +101,7 @@ class Room(val name: String,
 
 object Room {
 
-  case class LinkExits(rooms: Map[String, ActorRef])
+  case class LinkExits(rooms: Map[String, (ActorRef, List[String])])
 
   case class GetExit(dir: Int)
 

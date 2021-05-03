@@ -7,7 +7,7 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
   import NPC._
 
   //try to move randomly every 10 seconds
-  val moveDelay = 100
+  val moveDelay = 50
 
   private var hitPoints: Int = 80
   private var dead = false
@@ -29,30 +29,27 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
         case None =>
           Main.activityManager ! ActivityManager.ScheduleActivity(RndMove(util.Random.nextInt(6)), self, moveDelay)
       }
-
     case RndMove(dir: Int) =>
       if (!dead) currentLoc ! Room.GetExit(dir)
     case Player.GotHit(attackerRef, weapon, loc) =>
       if (loc == currentLoc) {
-
         hitPoints -= weapon.damage
         if (hitPoints <= 0) {
           dead = true
           context.parent ! NPCManager.RemoveNPC(npcName)
           currentLoc ! Room.RemoveCharacter(npcName, self)
           self ! PoisonPill
+        } else {
+          Main.activityManager ! ActivityManager
+            .ScheduleActivity(Player.GotHit(self, npcWeapon, currentLoc), attackerRef, npcWeapon.delay)
+          attackerRef ! Player.GetAttacked(npcName, npcWeapon)
         }
         attackerRef ! Player.AttackOutcome(self, dead, hitPoints, npcWeapon)
       }
     case Player.GetAttacked(_, _) =>
       canMove = false
-    case Player.AttackOutcome(attackerRef, _, _, _) =>
+    case Player.AttackOutcome(_, _, _, _) =>
       canMove = true
-      if (util.Random.nextInt(6) < 6) {
-        Main.activityManager ! ActivityManager
-          .ScheduleActivity(Player.GotHit(self, npcWeapon, currentLoc), attackerRef, npcWeapon.delay)
-        attackerRef ! Player.GetAttacked(npcName, npcWeapon)
-      }
     case Player.PrintMessage(_) =>
       None
     case Player.ReturnStats(requester) =>

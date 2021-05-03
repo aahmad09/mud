@@ -7,16 +7,18 @@ class RoomManager extends Actor {
 
   import RoomManager._
 
-  val roomsMap: Map[String, ActorRef] = readRooms()
+  val roomsMap: Map[String, (ActorRef, List[String])] = readRooms()
   context.children.foreach(child => child ! Room.LinkExits(roomsMap))
 
   def receive: Receive = {
     case BeginGame =>
-      sender ! Player.StartRoom(roomsMap("void_"))
+      sender ! Player.StartRoom(roomsMap("void_")._1)
+    case ShortestPath => ???
+    case GetRooms => ???
     case m => println("Unhandled message in RoomManager " + m)
   }
 
-  def readRooms(): Map[String, ActorRef] = {
+  def readRooms(): Map[String, (ActorRef, List[String])] = {
     val xmlData = xml.XML.loadFile("resources/map.xml")
     (xmlData \ "room").map(readRoom).toMap
   }
@@ -39,5 +41,9 @@ class RoomManager extends Actor {
 object RoomManager {
 
   case object BeginGame
+
+  case object GetRooms
+
+  case class ShortestPath(roomName: String)
 
 }

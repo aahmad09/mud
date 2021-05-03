@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="4" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Fixed few bugs in Combat">
+    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Fixed few more bugs in Combat">
+      <change beforePath="$PROJECT_DIR$/.idea/sbt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sbt.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +71,8 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="sbt.project.settings.configurable" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
@@ -107,6 +115,17 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -203,7 +222,12 @@
       <workItem from="1619655055318" duration="5707000" />
       <workItem from="1619806274469" duration="178000" />
       <workItem from="1619806642416" duration="3667000" />
-      <workItem from="1619817533633" duration="622000" />
+      <workItem from="1619817533633" duration="1255000" />
+      <workItem from="1619887368950" duration="1618000" />
+      <workItem from="1619978123414" duration="906000" />
+      <workItem from="1619979374967" duration="74000" />
+      <workItem from="1619979471156" duration="479000" />
+      <workItem from="1620063504012" duration="4265000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -296,7 +320,14 @@
       <option name="project" value="LOCAL" />
       <updated>1619810299122</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Fixed few more bugs in Combat">
+      <created>1619818684275</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1619818684275</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -329,6 +360,7 @@
     <MESSAGE value="Implemented kill command" />
     <MESSAGE value="Implemented Combat" />
     <MESSAGE value="Fixed few bugs in Combat" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed few bugs in Combat" />
+    <MESSAGE value="Fixed few more bugs in Combat" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed few more bugs in Combat" />
   </component>
 </project>

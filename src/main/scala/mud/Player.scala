@@ -87,7 +87,7 @@ class Player(val playerName: String,
       else {
         Main.activityManager ! ActivityManager
           .ScheduleActivity(GotHit(self, weapon, currentLoc), tgt, weapon.delay)
-        out.println(s"${tgt.path.name} survived attack, and their health is at $hitPoints")
+        out.println(s"${tgt.path.name} survived your attack, and their health is at $hitPoints")
       }
       canMove = true
     case ReturnStats(requester) =>
@@ -155,6 +155,8 @@ class Player(val playerName: String,
       case "say" => currentLoc ! Room.BroadcastInRoom(playerName, ": " + subCommands(1))
       case "tell" => val recieverAndMessage = subCommands(1).split(" ", 2)
         context.parent ! PlayerManager.PrivateMessage(self, recieverAndMessage(0), recieverAndMessage(1))
+      case "shortestPath" => Main.roomManager ! RoomManager.ShortestPath(subCommands(1).toLowerCase)
+      case "listRooms" => Main.roomManager ! RoomManager.GetRooms
       case _ =>
         out.println(s"$command is not a valid command. Please re-enter.")
     }
