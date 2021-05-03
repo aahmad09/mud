@@ -38,3 +38,13 @@ val goLoc = currentLoc.getExit("nsewud".indexOf(dir(0).toLower))
 
 Code compiles and runs with actors. I noticed an odd delay on the first command that I entered, but it wasn't significant. Also, since you have
 started putting in networking, please remember to print the port number so I won't have to look it up.
+
+## Show Code #9 (4 of 4 points)
+
+Code compiles and runs. There are NPCs and they move around. After the show code, when I saw code for ActivityManager that anotehr student was
+working on that was almost identical to yours, I realized that I don't think your activity manager is doing quite what you want. In particular,
+the line that resets resets numUpdates is going to cause problems combined with the fact that when you schedule you don't do delay+numUpdates. To see why,
+consider the following scenario. There is an event that takes place after 10 seconds, so a delay of 100. Some other thing, that will repeat, gets scheduled
+with a delay of 1 second (delay of 10). When numUpdates gets to 10 you process the quick event, but it immediately reschedules itself to happen one second later.
+That means it passes a delay of 10. However, your code is going to have it happen in the very next update because 10 < numUpdates at that time. Because
+you don't schedule at delay+numUpdates, things frequenty get scheduled in the past if there is some event that should happen long in the future.
