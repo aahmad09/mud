@@ -1,26 +1,36 @@
 package mud
 
 import akka.actor.{Actor, ActorRef, Props}
-import mud.NPCManager.CreateNPC
+
+import scala.collection.mutable
 
 class RoomManager extends Actor {
 
   import RoomManager._
 
-  val roomsMap: Map[String, (ActorRef, List[String])] = readRooms()
+  val roomsMap: BSTMap[String, ActorRef] = readRooms()
+  val exitInfo: mutable.Map[String, Array[String]] = mutable.Map[String, Array[String]]()
+
   context.children.foreach(child => child ! Room.LinkExits(roomsMap))
 
   def receive: Receive = {
     case BeginGame =>
-      sender ! Player.StartRoom(roomsMap("void_")._1)
-    case ShortestPath => ???
-    case GetRooms => ???
+      sender ! Player.StartRoom(roomsMap("void_"))
+    case ExitMap(key, exits) =>
+      exitInfo += key -> exits
+    case ShortestPath(currLoc, destLoc) =>
+      sender ! Player.PrintMessage(shortestPath(currLoc, destLoc))
+    case GetRooms =>
+      sender ! Player.PrintMessage(exitInfo.keys.mkString(", "))
     case m => println("Unhandled message in RoomManager " + m)
   }
 
-  def readRooms(): Map[String, (ActorRef, List[String])] = {
+  def readRooms(): BSTMap[String, ActorRef] = {
     val xmlData = xml.XML.loadFile("resources/map.xml")
-    (xmlData \ "room").map(readRoom).toMap
+    val retMap = new BSTMap[String, ActorRef](_ < _)
+    val data = (xmlData \ "room").map(readRoom)
+    for ((name, actor) <- data) retMap += name -> actor
+    retMap
   }
 
   def readRoom(node: xml.Node): (String, ActorRef) = {
@@ -31,9 +41,41 @@ class RoomManager extends Actor {
     val items = (node \ "item").map(n => Item((n \ "@name").text, (n \ "@desc").text,
       (n \ "@dmg").text.toInt, (n \ "@delay").text.toInt)).toList
     val ret = key -> context.actorOf(Props(new Room(name, desc, exits, items)), key)
-    (node \ "npc").foreach(n => Main.npcManager ! CreateNPC(name = (n \ "@name").text, desc = (n \ "@desc").text, weapon = Item((n \ "@itemName").text, (n \ "@itemDesc").text,
+    (node \ "npc").foreach(n => Main.npcManager ! NPCManager.CreateNPC(name = (n \ "@name").text, desc = (n \ "@desc").text, weapon = Item((n \ "@itemName").text, (n \ "@itemDesc").text,
       (n \ "@itemDmg").text.toInt, (n \ "@itemDelay").text.toInt), location = ret._2))
     ret
+  }
+
+  def shortestPath(origLoc: String, destLoc: String): String = {
+    var exitPath: List[String] = Nil
+
+    def helper(currLoc: String, destLoc: String, visited: Set[String]): List[String] = {
+      val newVisited = visited + currLoc
+      if (currLoc == destLoc) return Nil
+      else {
+        for (i <- exitInfo(currLoc); if i != "none"; if !visited(i)) yield {
+          val dir: Int = exitInfo(currLoc).indexOf(i)
+          println(dir)
+          dir match {
+            case 0 => exitPath = "north" :: helper(i, destLoc, newVisited)
+            case 1 => exitPath = "south" :: helper(i, destLoc, newVisited)
+            case 2 => exitPath = "east" :: helper(i, destLoc, newVisited)
+            case 3 => exitPath = "west" :: helper(i, destLoc, newVisited)
+            case 4 => exitPath = "up" :: helper(i, destLoc, newVisited)
+            case 5 => exitPath = "down" :: helper(i, destLoc, newVisited)
+            case _ => exitPath :+ " "
+          }
+        }
+      }
+      exitPath
+    }
+
+    if (exitInfo.contains(origLoc) && exitInfo.contains(destLoc)) {
+      var pathString = s"Shortest Path from $origLoc to $destLoc\n"
+      val path = helper(origLoc, destLoc, Set.empty[String])
+      pathString += path.mkString(", ")
+      pathString
+    } else "Could not find these regions"
   }
 
 }
@@ -44,6 +86,8 @@ object RoomManager {
 
   case object GetRooms
 
-  case class ShortestPath(roomName: String)
+  case class ShortestPath(currLoc: String, destLoc: String)
+
+  case class ExitMap(key: String, exits: Array[String])
 
 }

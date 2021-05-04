@@ -2,8 +2,8 @@ package mud
 
 //sorted pq
 class PriorityQueue[A](comp: (A, A) => Boolean) {
-  private val end = new Node(default, null, null)
   private var default: A = _
+  private val end = new Node(default, null, null)
 
   def enqueue(obj: A): Unit = {
     var rover = end.prev

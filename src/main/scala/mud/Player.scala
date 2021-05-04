@@ -155,8 +155,12 @@ class Player(val playerName: String,
       case "say" => currentLoc ! Room.BroadcastInRoom(playerName, ": " + subCommands(1))
       case "tell" => val recieverAndMessage = subCommands(1).split(" ", 2)
         context.parent ! PlayerManager.PrivateMessage(self, recieverAndMessage(0), recieverAndMessage(1))
-      case "shortestPath" => Main.roomManager ! RoomManager.ShortestPath(subCommands(1).toLowerCase)
-      case "listRooms" => Main.roomManager ! RoomManager.GetRooms
+      case "shortestpath" => try {val msg = subCommands(1).split(" ", 2)
+        Main.roomManager ! RoomManager.ShortestPath(msg(0), msg(1)) }
+      catch {
+        case _:ArrayIndexOutOfBoundsException => println("Please follow proper format")
+      }
+      case "listrooms" => Main.roomManager ! RoomManager.GetRooms
       case _ =>
         out.println(s"$command is not a valid command. Please re-enter.")
     }
@@ -185,17 +189,17 @@ class Player(val playerName: String,
   def printHelp(): String =
     """Sif supports the following commands:
 'north', 'south', 'east', 'west', 'up', 'down' - for warp drive in a direction
-'look' - get the full description of the current region
-'inv'/'inventory' - list the contents of your spaceship's inventory
-get 'item' - get an item from the planet and add it to your spaceship's inventory
-drop 'item' -  drop an item from your spaceship's inventory into the void or the planet
-equip 'item' - equip an item that is in your inventory
-unequip 'item' - unequip an item that is currently equipped
-kill 'character' 'item' - kill another character using an item that you have equipped
-inspect 'character' - get another player or NPC stats
-'stats' - get your own stats
-'say' - broadcast a message in your current room
-'tell' - whisper a message to another player
+'look - get the full description of the current region
+inv/inventory - list the contents of your spaceship's inventory
+get <item> - get an item from the planet and add it to your spaceship's inventory
+drop <item> -  drop an item from your spaceship's inventory into the void or the planet
+equip <item> - equip an item that is in your inventory
+unequip <item> - unequip an item that is currently equipped
+kill <character> 'item' - kill another character using an item that you have equipped
+inspect <character> - get another player or NPC stats
+stats - get your own stats
+say - broadcast a message in your current room
+tell <player name> - whisper a message to another player
 exit - leave the game
 help - print a list of commands and their description."""
 

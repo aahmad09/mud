@@ -6,14 +6,14 @@
             can only hear the hum of the engine. There are stars far away in the south which dot the blanket in an
             ornate pattern. Towards every other direction...nothingness. You need to warp drive to a planet...
         </description>
-        <exits>none,kudenerth_,none,none,none,none</exits>
+        <exits>none,kudenerth_,tatooine_,none,none,none</exits>
     </room>
 
-    <room keyword="kudenerth_" name="Planet Kudenerth">
+    <room keyword="kudenerth_" name="Kudenerth">
         <description>You land on the planet. It looks like a tropical planet, filled with unusual plants and creatures
             you've never seen before. Tall, lush, orange trees surround you.
         </description>
-        <exits>none,none,hoth_,none,none,none</exits>
+        <exits>none,none,hoth_,none,zennla_,none</exits>
         <item name="Sword" desc="A huge and long two-handed sword." dmg="20" delay="30">
         </item>
         <item name="Beaburg" desc="A red shaped banana. It seems poisonous." dmg="3" delay="100">
@@ -29,31 +29,48 @@
         </npc>
     </room>
 
-    <room keyword="hoth_" name="Planet Hoth">
+    <room keyword="hoth_" name="Hoth">
         <description>You land on the planet. At first glance, it seems unlikely that life would exist on this planet.
             Deserts stretch out till the horizon, strangely beautiful, yet eerily frightening.
         </description>
-        <exits>-1,-1,-1,kudenerth_,-1,zennla_</exits>
+        <exits>none,none,none,kudenerth_,tatooine_,none</exits>
         <item name="Minerals" desc="Shiny gold-like sharp objects." dmg="2" delay="10">
         </item>
         <npc name="Alecchni"
              desc="Alecchni has six spider-like legs and eight black eyes. She dislikes anyone bigger than itself."
-             itemName="Venom" itemDesc="Purplish liquid that smells foul. It seems highly poisonous" itemDmg="50"
+             itemName="Venom" itemDesc="Purplish liquid that smells foul. It seems highly poisonous" itemDmg="80"
              itemDelay="200">
         </npc>
     </room>
 
-    <room keyword="zennla_" name="Planet Zenn-La">
+    <room keyword="zennla_" name="Zenn-La">
         <description>You land on the planet. It seems like this planet is an ocean planet. The corals underwater have
             the same shapes as the surface organisms, almost as if they want to mimic them as closely as they can. But
             these shapes server their purpose. Much like the trees on Earth grow leafed branches, the corals on this
             planet grow to huge size and have branches with specialized polyps. Small, bioluminescent creatures lurk in
             the depths.
         </description>
-        <exits>-1,-1,-1,-1,hoth_,-1</exits>
+        <exits>none,none,tatooine_,none,none,kudenerth_</exits>
         <item name="Crystal clear liquid" desc="Is it suitable for drinking? You would have to test it." dmg="0"
               delay="10">
         </item>
+    </room>
+
+    <room keyword="tatooine_" name="Tatooine">
+        <description>You land on the planet. The explosive nature of this planet makes it impossible to sustain any life
+            forms. The volcanic eruptions are too devastating and the conditions on this planet change too drastically
+            during its orbit. Perhaps once it has calmed down, life might be possible, but the chances are slim.
+        </description>
+        <exits>none,none,none,tatooine_,none,hoth_</exits>
+        <item name="Lava Sample" desc="Can be thrown if needed" dmg="30"
+              delay="80">
+        </item>
+        <npc name="Malfas"
+             desc="Malfas, the Dragon, is the fiery orange of molten lava, its wings the sooty gray of igneous rock. With its fearsome curved horns, sharp teeth and huge talons, the Lava Dragon is a terrifying sight to behold. With each beat of its gargantuan wings, sooty volcanic ash rains down upon its victims."
+             itemName="Lava Breath"
+             itemDesc="Hot, burning sulphurous, poisoned flame that eviscerates anything it touches." itemDmg="100"
+             itemDelay="40">
+        </npc>
     </room>
 
 </rooms>

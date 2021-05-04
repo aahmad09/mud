@@ -16,7 +16,6 @@ class ActivityManager extends Actor {
         val nextActivity = activityPQ.dequeue()
         nextActivity.receiver ! nextActivity.msg
         activityPQ.dequeue()
-        //        if (activityPQ.isEmpty) numUpdates = 0
       }
     case ScheduleActivity(task, sender, delay) => activityPQ.enqueue(Activity(task, sender, delay + numUpdates))
     case m => println("Unhandled message in ActivityManager " + m)

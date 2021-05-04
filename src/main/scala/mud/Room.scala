@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorRef}
 
 import scala.collection.mutable
 
-class Room(val name: String,
+class Room(val roomName: String,
            val desc: String,
            private val exitKeys: Array[String],
            private var items: List[Item])
@@ -17,6 +17,7 @@ class Room(val name: String,
 
   def receive: Receive = {
     case LinkExits(rooms) =>
+      sender ! RoomManager.ExitMap(self.path.name, exitKeys)
       exits = exitKeys.map(key => rooms.get(key))
     case FullDescription =>
       sender ! Player.PrintMessage(fullDescription())
@@ -55,15 +56,10 @@ class Room(val name: String,
   }
 
   //Print the complete description of the room.
-  def fullDescription(): String = "*" * 40 + s"\n$name\n$desc\nExits: ${formatExits()}Items: ${formatItem(items)} " +
+  def fullDescription(): String = "*" * 40 + s"\n$roomName\n$desc\nExits: ${formatExits()}Items: ${formatItem(items)} " +
     s"\nCharacters in this room: $formatCharacters\n" + "*" * 40
 
-  def formatCharacters: String = {
-    var ret = ""
-    for ((characterName, _) <- charactersMap) ret += characterName + ", "
-    if (ret == "") ret = "None  "
-    ret.dropRight(2)
-  }
+  def formatCharacters: String = charactersMap.keys.mkString(", ")
 
   //Format item names and desc for printing
   def formatItem(unformattedItems: List[Item]): String = {
@@ -91,17 +87,11 @@ class Room(val name: String,
   //Add an item to this room
   def dropItem(item: Item): Unit = items = item :: items
 
-  //  def CharacterDescriptions(): String = {
-  //    var ret = ""
-  //    charactersMap.foreach(ret += _._2 ! Player.GetStats)
-  //    ret
-  //  }
-
 }
 
 object Room {
 
-  case class LinkExits(rooms: Map[String, (ActorRef, List[String])])
+  case class LinkExits(rooms: BSTMap[String, ActorRef])
 
   case class GetExit(dir: Int)
 
@@ -120,6 +110,19 @@ object Room {
   case class BroadcastInRoom(playerName: String, msg: String)
 
   case object FullDescription
+
+  case object GetName
+
+  def intToDir(intDirList: List[Int]): List[String] = {
+    intDirList.map {
+      case 0 => "north"
+      case 1 => "south"
+      case 2 => "east"
+      case 3 => "west"
+      case 4 => "up"
+      case 5 => "down"
+    }
+  }
 
 }
 

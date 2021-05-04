@@ -7,7 +7,7 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
   import NPC._
 
   //try to move randomly every 10 seconds
-  val moveDelay = 50
+  val moveDelay = 100
 
   private var hitPoints: Int = 80
   private var dead = false
