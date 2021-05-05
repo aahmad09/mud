@@ -50,20 +50,18 @@ class RoomManager extends Actor {
     var exitPath: List[String] = Nil
 
     def helper(currLoc: String, destLoc: String, visited: Set[String]): List[String] = {
-      val newVisited = visited + currLoc
       if (currLoc == destLoc) return Nil
       else {
-        for (i <- exitInfo(currLoc); if i != "none"; if !visited(i)) yield {
+        for (i <- exitInfo(currLoc); if i != "none"; if !visited(i)) {
           val dir: Int = exitInfo(currLoc).indexOf(i)
-          println(dir)
           dir match {
-            case 0 => exitPath = "north" :: helper(i, destLoc, newVisited)
-            case 1 => exitPath = "south" :: helper(i, destLoc, newVisited)
-            case 2 => exitPath = "east" :: helper(i, destLoc, newVisited)
-            case 3 => exitPath = "west" :: helper(i, destLoc, newVisited)
-            case 4 => exitPath = "up" :: helper(i, destLoc, newVisited)
-            case 5 => exitPath = "down" :: helper(i, destLoc, newVisited)
-            case _ => exitPath :+ " "
+            case 0 => exitPath = "north" :: helper(i, destLoc, visited + currLoc)
+            case 1 => exitPath = "south" :: helper(i, destLoc, visited + currLoc)
+            case 2 => exitPath = "east" :: helper(i, destLoc, visited + currLoc)
+            case 3 => exitPath = "west" :: helper(i, destLoc, visited + currLoc)
+            case 4 => exitPath = "up" :: helper(i, destLoc, visited + currLoc)
+            case 5 => exitPath = "down" :: helper(i, destLoc, visited + currLoc)
+            case _ => None
           }
         }
       }

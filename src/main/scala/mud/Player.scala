@@ -97,72 +97,67 @@ class Player(val playerName: String,
 
   //Parse and act on a command
   def processCommand(command: String): Unit = {
-    val subCommands = command.split(" ", 2)
-    subCommands(0).toLowerCase match {
-      case "exit" =>
-        out.println(s"Goodbye $playerName!")
-        sock.close()
-        stopGame()
-      case "help" =>
-        self ! Player.PrintMessage(printHelp())
-      case "look" =>
-        currentLoc ! Room.FullDescription
-      case "get" =>
-        currentLoc ! Room.GetItem(subCommands(1).toLowerCase())
-      case "drop" =>
-        getFromInventory(subCommands(1).toLowerCase()) match {
-          case None => out.println(s"The ${subCommands(1)} item is not in your inventory")
-          case Some(obtainedItem) => currentLoc ! Room.DropItem(obtainedItem)
-            inventory.remove(inventory.indexOf(obtainedItem))
-            if (obtainedItem == equippedItem.get) equippedItem = None
-            currentLoc ! Room.BroadcastInRoom(playerName, s"dropped the item ${obtainedItem.name}")
-        }
-      case "equip" =>
-        getFromInventory(subCommands(1).toLowerCase()) match {
-          case None => out.println(s"The ${subCommands(1)} item is not in your inventory")
-          case Some(obtainedItem) => equippedItem = Option(obtainedItem)
-            out.println(s"Equipped ${subCommands(1)}")
-        }
-      case "unequip" => //make better
-        try {
+    try {
+      val subCommands = command.split(" ", 2)
+      subCommands(0).toLowerCase match {
+        case "exit" =>
+          out.println(s"Goodbye $playerName!")
+          sock.close()
+          stopGame()
+        case "help" =>
+          self ! Player.PrintMessage(printHelp())
+        case "look" =>
+          currentLoc ! Room.FullDescription
+        case "get" =>
+          currentLoc ! Room.GetItem(subCommands(1).toLowerCase())
+        case "drop" =>
+          getFromInventory(subCommands(1).toLowerCase()) match {
+            case None => out.println(s"The ${subCommands(1)} item is not in your inventory")
+            case Some(obtainedItem) => currentLoc ! Room.DropItem(obtainedItem)
+              inventory.remove(inventory.indexOf(obtainedItem))
+              if (obtainedItem == equippedItem.get) equippedItem = None
+              currentLoc ! Room.BroadcastInRoom(playerName, s"dropped the item ${obtainedItem.name}")
+          }
+        case "equip" =>
+          getFromInventory(subCommands(1).toLowerCase()) match {
+            case None => out.println(s"The ${subCommands(1)} item is not in your inventory")
+            case Some(obtainedItem) => equippedItem = Option(obtainedItem)
+              out.println(s"Equipped ${subCommands(1)}")
+          }
+        case "unequip" =>
           equippedItem match {
             case None => out.println(s"You have not equipped any item")
             case Some(getItem) => if (subCommands(1).toLowerCase() == getItem.name) equippedItem = None
               out.println(s"Unequipped ${subCommands(1)}")
           }
-        } catch {
-          case _: ArrayIndexOutOfBoundsException => out.println("Please specify which item to unequip")
-        }
-      case "kill" =>
-        try {
+        case "kill" =>
           equippedItem match {
             case None => out.println(s"You have not equipped any item")
             case Some(getItem) => currentLoc ! Room.FindCharacter(subCommands(1).split(" ")(0), getItem)
           }
-        } catch {
-          case _: ArrayIndexOutOfBoundsException => out.println("please follow proper format of commands")
-        }
-      case "flee" =>
-        val dir = util.Random.nextInt(6)
-        currentLoc ! Room.GetExit(dir)
-      case "inspect" => currentLoc ! Room.GetCharStats(subCommands(1).toLowerCase, self)
-      case c if Set("stats", "statistics", "hp", "health").contains(c) =>
-        out.println(s"Health: $hitPoints\n${inventoryListing()}")
-      case c if c == "inventory" || c == "inv" =>
-        out.println(inventoryListing())
-      case c if "nsewud".contains(c.toLowerCase) || Set("north", "east", "south", "west", "up", "down").contains(c) =>
-        if (canMove) move(command) else out.println("You cannot move because you are either attacking or being attacked.")
-      case "say" => currentLoc ! Room.BroadcastInRoom(playerName, ": " + subCommands(1))
-      case "tell" => val recieverAndMessage = subCommands(1).split(" ", 2)
-        context.parent ! PlayerManager.PrivateMessage(self, recieverAndMessage(0), recieverAndMessage(1))
-      case "shortestpath" => try {val msg = subCommands(1).split(" ", 2)
-        Main.roomManager ! RoomManager.ShortestPath(msg(0), msg(1)) }
-      catch {
-        case _:ArrayIndexOutOfBoundsException => println("Please follow proper format")
+        case "flee" =>
+          val dir = util.Random.nextInt(6)
+          currentLoc ! Room.GetExit(dir)
+        case "inspect" => currentLoc ! Room.GetCharStats(subCommands(1).toLowerCase, self)
+        case c if Set("stats", "statistics", "hp", "health").contains(c) =>
+          out.println(s"Health: $hitPoints\n${inventoryListing()}")
+        case c if c == "inventory" || c == "inv" =>
+          out.println(inventoryListing())
+        case c if "nsewud".contains(c.toLowerCase) || Set("north", "east", "south", "west", "up", "down").contains(c) =>
+          if (canMove) move(command) else out.println("You cannot move because you are either attacking or being attacked.")
+        case "say" => currentLoc ! Room.BroadcastInRoom(playerName, ": " + subCommands(1))
+        case "tell" => val recieverAndMessage = subCommands(1).split(" ", 2)
+          context.parent ! PlayerManager.PrivateMessage(self, recieverAndMessage(0), recieverAndMessage(1))
+        case "shortestpath" =>
+          val msg = subCommands(1).split(" ", 2)
+          Main.roomManager ! RoomManager.ShortestPath(msg(0), msg(1))
+        case "listrooms"
+        => Main.roomManager ! RoomManager.GetRooms
+        case _ =>
+          out.println(s"$command is not a valid command. Please re-enter.")
       }
-      case "listrooms" => Main.roomManager ! RoomManager.GetRooms
-      case _ =>
-        out.println(s"$command is not a valid command. Please re-enter.")
+    } catch {
+      case _: ArrayIndexOutOfBoundsException => out.println("Please follow the proper format of commands. Type 'help' to see a list of available commands")
     }
   }
 
@@ -200,6 +195,8 @@ inspect <character> - get another player or NPC stats
 stats - get your own stats
 say - broadcast a message in your current room
 tell <player name> - whisper a message to another player
+listrooms - list all the rooms in the game
+shortestpath <starting location> <ending location> - return the shortest path between two locations
 exit - leave the game
 help - print a list of commands and their description."""
 
@@ -212,12 +209,20 @@ help - print a list of commands and their description."""
   //Build a String with the contents of the inventory
   def inventoryListing(): String = {
     var invStr: String = "Inventory:\n"
-    for (elem <- inventory) if (elem != equippedItem.get) invStr += s"\t${elem.name} - ${elem.desc}\n"
+    for (elem <- inventory) if (elem != equippedItem.get) invStr += s"\t${
+      elem.name
+    } - ${
+      elem.desc
+    }\n"
     if (invStr == "Inventory:\n") invStr = "Inventory: Empty "
     invStr = invStr.dropRight(1)
     //do a foreach on a list if multiple items can be equipped
     equippedItem match {
-      case Some(item) => invStr += s"\nEquipped Items: \n\t${item.name} - ${item.desc}"
+      case Some(item) => invStr += s"\nEquipped Items: \n\t${
+        item.name
+      } - ${
+        item.desc
+      }"
       case None => invStr += "\nEquipped Items: None"
     }
     invStr

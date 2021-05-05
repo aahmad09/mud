@@ -40,9 +40,11 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
           currentLoc ! Room.RemoveCharacter(npcName, self)
           self ! PoisonPill
         } else {
-          Main.activityManager ! ActivityManager
-            .ScheduleActivity(Player.GotHit(self, npcWeapon, currentLoc), attackerRef, npcWeapon.delay)
-          attackerRef ! Player.GetAttacked(npcName, npcWeapon)
+          if (scala.util.Random.nextInt(100) < 60) {
+            Main.activityManager ! ActivityManager
+              .ScheduleActivity(Player.GotHit(self, npcWeapon, currentLoc), attackerRef, npcWeapon.delay)
+            attackerRef ! Player.GetAttacked(npcName, npcWeapon)
+          }
         }
         attackerRef ! Player.AttackOutcome(self, dead, hitPoints, npcWeapon)
       }
