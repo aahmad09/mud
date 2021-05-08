@@ -52,16 +52,15 @@ class RoomManager extends Actor {
     def helper(currLoc: String, destLoc: String, visited: Set[String]): List[String] = {
       if (currLoc == destLoc) return Nil
       else {
-        for (i <- exitInfo(currLoc); if i != "none"; if !visited(i)) {
-          val dir: Int = exitInfo(currLoc).indexOf(i)
-          dir match {
+        for (i <- exitInfo(currLoc); if i != "none" && !visited(i)) yield {
+          exitInfo(currLoc).indexOf(i) match {
             case 0 => exitPath = "north" :: helper(i, destLoc, visited + currLoc)
             case 1 => exitPath = "south" :: helper(i, destLoc, visited + currLoc)
             case 2 => exitPath = "east" :: helper(i, destLoc, visited + currLoc)
             case 3 => exitPath = "west" :: helper(i, destLoc, visited + currLoc)
             case 4 => exitPath = "up" :: helper(i, destLoc, visited + currLoc)
             case 5 => exitPath = "down" :: helper(i, destLoc, visited + currLoc)
-            case _ => None
+            case _ =>
           }
         }
       }

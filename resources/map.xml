@@ -13,7 +13,7 @@
         <description>You land on the planet. It looks like a tropical planet, filled with unusual plants and creatures
             you've never seen before. Tall, lush, orange trees surround you.
         </description>
-        <exits>none,none,hoth_,none,zennla_,none</exits>
+        <exits>none,none,hoth_,none,zennla_,naruridan_</exits>
         <item name="Sword" desc="A huge and long two-handed sword." dmg="20" delay="30">
         </item>
         <item name="Beaburg" desc="A red shaped banana. It seems poisonous." dmg="3" delay="100">
@@ -33,7 +33,7 @@
         <description>You land on the planet. At first glance, it seems unlikely that life would exist on this planet.
             Deserts stretch out till the horizon, strangely beautiful, yet eerily frightening.
         </description>
-        <exits>none,none,none,kudenerth_,tatooine_,none</exits>
+        <exits>none,none,none,kudenerth_,tatooine_,naruridan_</exits>
         <item name="Minerals" desc="Shiny gold-like sharp objects." dmg="2" delay="10">
         </item>
         <npc name="Alecchni"
@@ -61,7 +61,7 @@
             forms. The volcanic eruptions are too devastating and the conditions on this planet change too drastically
             during its orbit. Perhaps once it has calmed down, life might be possible, but the chances are slim.
         </description>
-        <exits>none,none,none,tatooine_,none,hoth_</exits>
+        <exits>none,none,none,zennla_,none,hoth_</exits>
         <item name="Lava Sample" desc="Can be thrown if needed" dmg="30"
               delay="80">
         </item>
@@ -71,6 +71,17 @@
              itemDesc="Hot, burning sulphurous, poisoned flame that eviscerates anything it touches." itemDmg="100"
              itemDelay="40">
         </npc>
+    </room>
+
+    <room keyword="naruridan_" name="Naruridan">
+        <description>You land on the planet. Powerful winds nearly lift you off of the ground and rain barrages down,
+            freezing you within minutes. Off to the side you hear growls and grunts of beings literally and figuratively
+            beyond your world.
+        </description>
+        <exits>none,none,none,none,hoth_,none</exits>
+        <item name="Crystal clear liquid" desc="Is it suitable for drinking? You would have to test it." dmg="0"
+              delay="10">
+        </item>
     </room>
 
 </rooms>

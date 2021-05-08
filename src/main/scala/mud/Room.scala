@@ -64,7 +64,7 @@ class Room(val roomName: String,
   //Format item names and desc for printing
   def formatItem(unformattedItems: List[Item]): String = {
     var ret: String = ""
-    for (elem <- unformattedItems) ret += elem.name + ", "
+    unformattedItems.foreach(ret += _.name + ", ")
     if (ret == "") ret = "None  "
     ret.dropRight(2)
   }
@@ -112,17 +112,6 @@ object Room {
   case object FullDescription
 
   case object GetName
-
-  def intToDir(intDirList: List[Int]): List[String] = {
-    intDirList.map {
-      case 0 => "north"
-      case 1 => "south"
-      case 2 => "east"
-      case 3 => "west"
-      case 4 => "up"
-      case 5 => "down"
-    }
-  }
 
 }
 
