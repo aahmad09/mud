@@ -60,9 +60,9 @@ class Player(val playerName: String,
     case InitiateAttack(tgt, weapon) =>
       tgt match {
         case Some(tgtFound) => canMove = false
+          tgtFound ! Player.GetAttacked(playerName, weapon)
           Main.activityManager ! ActivityManager
             .ScheduleActivity(GotHit(self, weapon, currentLoc), tgtFound, weapon.delay)
-          tgtFound ! Player.GetAttacked(playerName, weapon)
         case None => out.println("That character is not in the room")
       }
     case GetAttacked(charName, weapon) =>
@@ -85,9 +85,9 @@ class Player(val playerName: String,
     case AttackOutcome(tgt, dead, hitPoints, weapon) =>
       if (dead) out.println("You killed " + tgt.path.name)
       else {
+        out.println(s"${tgt.path.name} survived your attack, and their health is at $hitPoints. Attacking them again . . .")
         Main.activityManager ! ActivityManager
           .ScheduleActivity(GotHit(self, weapon, currentLoc), tgt, weapon.delay)
-        out.println(s"${tgt.path.name} survived your attack, and their health is at $hitPoints")
       }
       canMove = true
     case ReturnStats(requester) =>

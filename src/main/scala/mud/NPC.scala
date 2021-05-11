@@ -1,6 +1,6 @@
 package mud
 
-import akka.actor.{Actor, ActorRef, PoisonPill}
+import akka.actor.{Actor, ActorRef}
 
 class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var currentLoc: ActorRef) extends Actor {
 
@@ -30,7 +30,7 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
           Main.activityManager ! ActivityManager.ScheduleActivity(RndMove(util.Random.nextInt(6)), self, moveDelay)
       }
     case RndMove(dir: Int) =>
-      if (!dead) currentLoc ! Room.GetExit(dir)
+      if (!dead && canMove) currentLoc ! Room.GetExit(dir)
     case Player.GotHit(attackerRef, weapon, loc) =>
       if (loc == currentLoc) {
         hitPoints -= weapon.damage
@@ -38,15 +38,12 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
           dead = true
           context.parent ! NPCManager.RemoveNPC(npcName)
           currentLoc ! Room.RemoveCharacter(npcName, self)
-          self ! PoisonPill
         } else {
-          if (scala.util.Random.nextInt(100) < 60) {
-            Main.activityManager ! ActivityManager
-              .ScheduleActivity(Player.GotHit(self, npcWeapon, currentLoc), attackerRef, npcWeapon.delay)
-            attackerRef ! Player.GetAttacked(npcName, npcWeapon)
-          }
+          Main.activityManager ! ActivityManager
+            .ScheduleActivity(Player.GotHit(self, npcWeapon, currentLoc), attackerRef, npcWeapon.delay)
+          attackerRef ! Player.GetAttacked(npcName, npcWeapon)
         }
-        attackerRef ! Player.AttackOutcome(self, dead, hitPoints, npcWeapon)
+        attackerRef ! Player.AttackOutcome(self, dead, hitPoints, weapon)
       }
     case Player.GetAttacked(_, _) =>
       canMove = false

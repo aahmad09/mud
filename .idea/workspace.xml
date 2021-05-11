@@ -7,11 +7,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Implemented ShortestPath and TreeMap (grade this)">
+    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Added another room">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/map.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/map.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Room.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,6 +123,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Scala REPL" type="ScalaScriptConsoleRunConfiguration" factoryName="Scala Console" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="MUD" />
       <option name="allowRunningInParallel" value="false" />
@@ -228,7 +239,16 @@
       <workItem from="1620227752715" duration="442000" />
       <workItem from="1620237427988" duration="1465000" />
       <workItem from="1620313537470" duration="751000" />
-      <workItem from="1620508129655" duration="3637000" />
+      <workItem from="1620508129655" duration="4109000" />
+      <workItem from="1620512750776" duration="925000" />
+      <workItem from="1620514364535" duration="591000" />
+      <workItem from="1620590986395" duration="127000" />
+      <workItem from="1620597014301" duration="295000" />
+      <workItem from="1620612457812" duration="4000" />
+      <workItem from="1620680623226" duration="2867000" />
+      <workItem from="1620749243550" duration="26000" />
+      <workItem from="1620753241350" duration="87000" />
+      <workItem from="1620755186263" duration="1889000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -356,7 +376,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620238946150</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Added another room">
+      <created>1620512142404</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1620512142405</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -394,6 +421,7 @@
     <MESSAGE value="Implemented ShortestPath" />
     <MESSAGE value="Implemented ShortestPath and TreeMap" />
     <MESSAGE value="Implemented ShortestPath and TreeMap (grade this)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented ShortestPath and TreeMap (grade this)" />
+    <MESSAGE value="Added another room" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added another room" />
   </component>
 </project>

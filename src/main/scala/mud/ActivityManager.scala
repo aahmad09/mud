@@ -6,14 +6,14 @@ class ActivityManager extends Actor {
 
   import ActivityManager._
 
-  val activityPQ: PriorityQueue[Activity] = new PriorityQueue[Activity](_.delay < _.delay)
+  val activityPQ: BinaryHeap[Activity] = new BinaryHeap[Activity](_.delay < _.delay)
   private var numUpdates = 0
 
   def receive: Receive = {
     case CheckQueue =>
       numUpdates += 1
       while (!activityPQ.isEmpty && activityPQ.peek.delay <= numUpdates) {
-        val nextActivity = activityPQ.dequeue()
+        val nextActivity = activityPQ.peek
         nextActivity.receiver ! nextActivity.msg
         activityPQ.dequeue()
       }
