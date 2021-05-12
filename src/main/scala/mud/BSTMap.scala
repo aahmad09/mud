@@ -4,8 +4,6 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 
 class BSTMap[K, V](lt: (K, K) => Boolean) extends mutable.Map[K, V] {
-  private class Node(val key: K, var value: V, var left: Node, var right: Node)
-
   private var root: Node = null
 
   def -=(key: K): BSTMap.this.type = {
@@ -64,6 +62,22 @@ class BSTMap[K, V](lt: (K, K) => Boolean) extends mutable.Map[K, V] {
 
     root = helper(root)
     this
+  }
+
+  def countLeaf(n: Node): Int = {
+    if (n == null) 0
+    else if (n.left == null && n.right == null) 1
+    else countLeaf(n.left) + countLeaf(n.right)
+  }
+
+  def maxDepth(n: Node): Int = {
+    if (n == null) 0
+    else Math.max(maxDepth(n.left), maxDepth(n.right)) + 1
+  }
+
+  def countNodes(n: Node): Int = {
+    if (n == null) 0
+    else countNodes(n.left) + countNodes(n.right)
   }
 
   // Members declared in scala.collection.MapLike
@@ -127,4 +141,6 @@ class BSTMap[K, V](lt: (K, K) => Boolean) extends mutable.Map[K, V] {
 
     helper(root)
   }
+
+  private class Node(val key: K, var value: V, var left: Node, var right: Node)
 }

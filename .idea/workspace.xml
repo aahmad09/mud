@@ -7,11 +7,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Added another room">
+    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="NPCs attack once in retaliation, remove NPC actor upon death">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/ActivityManager.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/BSTMap.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/BSTMap.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/BinaryHeap.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/BinaryHeap.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/MutableDLList.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPC.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/NPCManager.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/PriorityQueue.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/PriorityQueue.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +253,13 @@
       <workItem from="1620680623226" duration="2867000" />
       <workItem from="1620749243550" duration="26000" />
       <workItem from="1620753241350" duration="87000" />
-      <workItem from="1620755186263" duration="1889000" />
+      <workItem from="1620755186263" duration="2146000" />
+      <workItem from="1620761686404" duration="62000" />
+      <workItem from="1620764222429" duration="1944000" />
+      <workItem from="1620766283206" duration="2214000" />
+      <workItem from="1620769662137" duration="355000" />
+      <workItem from="1620772499368" duration="2407000" />
+      <workItem from="1620836843874" duration="998000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -383,7 +394,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620512142405</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Implemented Binary Heaps (not tested thoroughly)">
+      <created>1620757235771</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1620757235771</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -422,6 +440,8 @@
     <MESSAGE value="Implemented ShortestPath and TreeMap" />
     <MESSAGE value="Implemented ShortestPath and TreeMap (grade this)" />
     <MESSAGE value="Added another room" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added another room" />
+    <MESSAGE value="Implemented Binary Heaps (not tested thoroughly)" />
+    <MESSAGE value="NPCs attack once in retaliation, remove NPC actor upon death" />
+    <option name="LAST_COMMIT_MESSAGE" value="NPCs attack once in retaliation, remove NPC actor upon death" />
   </component>
 </project>

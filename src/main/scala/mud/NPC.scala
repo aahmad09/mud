@@ -10,6 +10,7 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
   val moveDelay = 100
 
   private var hitPoints: Int = 80
+  private var attackingState: Boolean = false
   private var dead = false
   private var canMove: Boolean = true
 
@@ -39,9 +40,12 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
           context.parent ! NPCManager.RemoveNPC(npcName)
           currentLoc ! Room.RemoveCharacter(npcName, self)
         } else {
-          Main.activityManager ! ActivityManager
-            .ScheduleActivity(Player.GotHit(self, npcWeapon, currentLoc), attackerRef, npcWeapon.delay)
-          attackerRef ! Player.GetAttacked(npcName, npcWeapon)
+          if (!attackingState) {
+            Main.activityManager ! ActivityManager
+              .ScheduleActivity(Player.GotHit(self, npcWeapon, currentLoc), attackerRef, npcWeapon.delay)
+            attackerRef ! Player.GetAttacked(npcName, npcWeapon)
+            attackingState = true
+          }
         }
         attackerRef ! Player.AttackOutcome(self, dead, hitPoints, weapon)
       }
@@ -49,11 +53,18 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
       canMove = false
     case Player.AttackOutcome(_, _, _, _) =>
       canMove = true
+      attackingState = false
     case Player.PrintMessage(_) =>
       None
     case Player.ReturnStats(requester) =>
       requester ! Player.PrintMessage(s"NPC: $npcName\nDescription: $npcDesc\nWeapon: ${npcWeapon.name} - ${npcWeapon.desc}\nHit points: $hitPoints")
     case m => println("Unhandled message in NPC " + m)
+  }
+
+  def stopGame(): Unit = {
+    context.parent ! PlayerManager.RemovePlayer(npcName)
+    currentLoc ! Room.RemoveCharacter(npcName, self)
+    context.stop(self)
   }
 
 }

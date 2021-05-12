@@ -11,8 +11,8 @@ class Player(val playerName: String,
 
   import Player._
 
-  private val inventory: MutableDLList[Item] = new MutableDLList[Item]
-  private var hitPoints: Int = 50
+  val inventory: MutableDLList[Item] = new MutableDLList[Item]
+  private var hitPoints: Int = 100
   private var equippedItem: Option[Item] = None
   private var currentLoc: ActorRef = null
   private var canMove: Boolean = true
@@ -77,8 +77,8 @@ class Player(val playerName: String,
         if (hitPoints <= 0) {
           dead = true
           out.println("Game over!")
-          self ! PoisonPill
           sock.close()
+          stopGame()
         }
         attackerRef ! Player.AttackOutcome(self, dead, hitPoints, weapon)
       } else out.println(s"${attackerRef.path.name} tried to attack you, but you fled just in time.")

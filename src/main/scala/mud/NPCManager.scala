@@ -16,6 +16,8 @@ class NPCManager extends Actor {
       context.actorOf(Props(new NPC(name, desc, weapon, location)))
     case RemoveNPC(npcName) =>
       npcMap - npcName
+    case PlayerManager.RemovePlayer(npc) =>
+      npcMap - npc
     case m => println("Unhandled message in NPCManager " + m)
   }
 }

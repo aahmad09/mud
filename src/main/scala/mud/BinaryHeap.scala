@@ -2,7 +2,7 @@ package mud
 
 import scala.reflect.ClassTag
 
-class BinaryHeap[A : ClassTag](higherP: (A, A) => Boolean) {
+class BinaryHeap[A: ClassTag](higherP: (A, A) => Boolean) {
   private var heap = Array.fill(10)(null.asInstanceOf[A])
   private var end = 1
 
@@ -13,8 +13,8 @@ class BinaryHeap[A : ClassTag](higherP: (A, A) => Boolean) {
       heap = tmp
     }
     var bubble = end
-    while (bubble > 1 && higherP(a,heap(bubble/2))) {
-      heap(bubble) = heap(bubble/2)
+    while (bubble > 1 && higherP(a, heap(bubble / 2))) {
+      heap(bubble) = heap(bubble / 2)
       bubble /= 2
     }
     heap(bubble) = a
@@ -27,8 +27,8 @@ class BinaryHeap[A : ClassTag](higherP: (A, A) => Boolean) {
     val tmp = heap(end)
     var stone = 1
     var flag = true
-    while (stone*2 < end && flag) {
-      var higherPChild = stone *2
+    while (stone * 2 < end && flag) {
+      var higherPChild = stone * 2
       if (higherPChild + 1 < end && higherP(heap(higherPChild + 1), heap(higherPChild))) higherPChild += 1
       if (higherP(heap(higherPChild), tmp)) {
         heap(stone) = heap(higherPChild)
@@ -41,5 +41,5 @@ class BinaryHeap[A : ClassTag](higherP: (A, A) => Boolean) {
 
   def peek: A = heap(1)
 
-  def isEmpty:Boolean = end == 1
+  def isEmpty: Boolean = end == 1
 }
