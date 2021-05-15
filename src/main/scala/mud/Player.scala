@@ -115,7 +115,7 @@ class Player(val playerName: String,
             case None => out.println(s"The ${subCommands(1)} item is not in your inventory")
             case Some(obtainedItem) => currentLoc ! Room.DropItem(obtainedItem)
               inventory.remove(inventory.indexOf(obtainedItem))
-              if (obtainedItem == equippedItem.get) equippedItem = None
+              if (equippedItem.isDefined && obtainedItem == equippedItem.get) equippedItem = None
               currentLoc ! Room.BroadcastInRoom(playerName, s"dropped the item ${obtainedItem.name}")
           }
         case "equip" =>
@@ -262,5 +262,3 @@ object Player {
   case object VerifyInput
 
 }
-
-

@@ -2,7 +2,7 @@ package mud
 
 import scala.reflect.ClassTag
 
-class BinaryHeap[A: ClassTag](higherP: (A, A) => Boolean) {
+class BinaryHeapPQ[A: ClassTag](higherP: (A, A) => Boolean) {
   private var heap = Array.fill(10)(null.asInstanceOf[A])
   private var end = 1
 

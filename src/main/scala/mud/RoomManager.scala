@@ -45,7 +45,6 @@ class RoomManager extends Actor {
       }
       exitPath
     }
-
     //build return strings
     if (exitInfo.contains(origLoc) && exitInfo.contains(destLoc)) {
       s"Shortest Path from $origLoc to $destLoc\n" + helper(origLoc, destLoc, Set.empty[String]).mkString(", ")

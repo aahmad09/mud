@@ -6,7 +6,7 @@ class ActivityManager extends Actor {
 
   import ActivityManager._
 
-  val activityPQ: BinaryHeap[Activity] = new BinaryHeap[Activity](_.delay < _.delay)
+  val activityPQ: BinaryHeapPQ[Activity] = new BinaryHeapPQ[Activity](_.delay < _.delay)
   private var numUpdates = 0
 
   def receive: Receive = {
