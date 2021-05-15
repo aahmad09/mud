@@ -7,12 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="NPCs attack once in retaliation, remove NPC actor upon death">
+    <list default="true" id="6b2421b2-bd35-4e9a-b182-df0dee8b7324" name="Default Changelist" comment="Fixed Minor Bugs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/BSTMap.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/BSTMap.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/Player.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/PriorityQueue.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/PriorityQueue.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/mud/RoomManager.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -271,7 +268,8 @@
       <workItem from="1621028729987" duration="347000" />
       <workItem from="1621034734489" duration="595000" />
       <workItem from="1621047257597" duration="4903000" />
-      <workItem from="1621100236294" duration="381000" />
+      <workItem from="1621100236294" duration="764000" />
+      <workItem from="1621101091217" duration="376000" />
     </task>
     <task id="LOCAL-00001" summary="Working aimlessly at actors (project has errors)">
       <created>1616295577610</created>
@@ -420,7 +418,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620837939551</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Fixed Minor Bugs">
+      <created>1621100972639</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1621100972639</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -461,6 +466,7 @@
     <MESSAGE value="Added another room" />
     <MESSAGE value="Implemented Binary Heaps (not tested thoroughly)" />
     <MESSAGE value="NPCs attack once in retaliation, remove NPC actor upon death" />
-    <option name="LAST_COMMIT_MESSAGE" value="NPCs attack once in retaliation, remove NPC actor upon death" />
+    <MESSAGE value="Fixed Minor Bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Minor Bugs" />
   </component>
 </project>

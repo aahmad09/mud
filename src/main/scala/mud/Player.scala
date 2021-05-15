@@ -80,14 +80,19 @@ class Player(val playerName: String,
           sock.close()
           stopGame()
         }
-        attackerRef ! Player.AttackOutcome(self, dead, hitPoints, weapon)
-      } else out.println(s"${attackerRef.path.name} tried to attack you, but you fled just in time.")
-    case AttackOutcome(tgt, dead, hitPoints, weapon) =>
-      if (dead) out.println("You killed " + tgt.path.name)
-      else {
-        out.println(s"${tgt.path.name} survived your attack, and their health is at $hitPoints. Attacking them again . . .")
-        Main.activityManager ! ActivityManager
-          .ScheduleActivity(GotHit(self, weapon, currentLoc), tgt, weapon.delay)
+        attackerRef ! Player.AttackOutcome(self, dead, hitPoints, weapon,currentLoc)
+      } else { attackerRef ! Player.PrintMessage("They fled.")
+        out.println(s"${attackerRef.path.name} tried to attack you, but you fled just in time.")
+        attackerRef ! Player.AttackOutcome(self, dead, -1, weapon,currentLoc)
+      }
+    case AttackOutcome(tgt, dead, hitPoints, weapon, loc) =>
+      if (hitPoints != -1 ) { //TODO: make better
+        if (dead) out.println("You killed " + tgt.path.name)
+        else {
+          out.println(s"${tgt.path.name} survived your attack, and their health is at $hitPoints. Attacking them again . . .")
+          Main.activityManager ! ActivityManager
+            .ScheduleActivity(GotHit(self, weapon, currentLoc), tgt, weapon.delay)
+        }
       }
       canMove = true
     case ReturnStats(requester) =>
@@ -243,7 +248,7 @@ object Player {
 
   case class GotHit(attackerRef: ActorRef, weapon: Item, loc: ActorRef)
 
-  case class AttackOutcome(target: ActorRef, dead: Boolean, hitPoints: Int, weapon: Item)
+  case class AttackOutcome(target: ActorRef, dead: Boolean, hitPoints: Int, weapon: Item, loc: ActorRef)
 
   case class TakeExit(oroom: Option[ActorRef])
 

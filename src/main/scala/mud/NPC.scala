@@ -47,11 +47,11 @@ class NPC(val npcName: String, npcDesc: String, val npcWeapon: Item, private var
             attackingState = true
           }
         }
-        attackerRef ! Player.AttackOutcome(self, dead, hitPoints, weapon)
+        attackerRef ! Player.AttackOutcome(self, dead, hitPoints, weapon,currentLoc)
       }
     case Player.GetAttacked(_, _) =>
       canMove = false
-    case Player.AttackOutcome(_, _, _, _) =>
+    case Player.AttackOutcome(_, _, _, _, _) =>
       canMove = true
       attackingState = false
     case Player.PrintMessage(_) =>
