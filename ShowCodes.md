@@ -48,3 +48,7 @@ consider the following scenario. There is an event that takes place after 10 sec
 with a delay of 1 second (delay of 10). When numUpdates gets to 10 you process the quick event, but it immediately reschedules itself to happen one second later.
 That means it passes a delay of 10. However, your code is going to have it happen in the very next update because 10 < numUpdates at that time. Because
 you don't schedule at delay+numUpdates, things frequenty get scheduled in the past if there is some event that should happen long in the future.
+
+## Show Code #11 (4 of 4 points)
+
+MUD works with the heap in place.
